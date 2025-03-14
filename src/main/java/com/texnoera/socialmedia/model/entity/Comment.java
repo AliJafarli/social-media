@@ -21,4 +21,12 @@ public class Comment {
     @Size(min = 1, max = 400)
     @Column(name = "comment_text", nullable = false)
     private String text;
+
+    @ManyToOne
+    @JoinColumn(name = "post_id",nullable = false)
+    private Post post;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id",nullable = false)
+    private User user;
 }

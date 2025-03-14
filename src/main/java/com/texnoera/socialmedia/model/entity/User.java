@@ -7,6 +7,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Set;
+
 
 @Data
 @Entity
@@ -35,5 +37,24 @@ public class User {
     @Size(max=80)
     @Column(name = "password", nullable = false, length = 80)
     private String password;
+
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Follow> following;
+
+    @OneToMany(mappedBy = "following",cascade = CascadeType.ALL)
+    private Set<Follow> followers;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Post> posts;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Like> likes;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<UserImage> images;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private Set<Comment> comments;
 
 }

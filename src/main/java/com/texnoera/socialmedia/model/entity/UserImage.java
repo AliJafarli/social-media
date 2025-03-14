@@ -26,5 +26,10 @@ public class UserImage {
     @Column(name = "data", length = 1000)
     private byte[] data;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+
 
 }
