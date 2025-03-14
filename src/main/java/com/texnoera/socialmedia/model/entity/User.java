@@ -2,6 +2,7 @@ package com.texnoera.socialmedia.model.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,18 +20,16 @@ public class User {
     @Column(name = "id")
     private Integer id;
 
-
-    @Column(name = "name", nullable = false)
-    private String name;
-
-    @Column(name = "last_name", nullable = false)
-    private String lastName;
+    @Size(max=30)
+    @Column(name = "username", nullable = false, length = 30)
+    private String username;
 
     @Email
     @Column(name = "email", nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Size(max=80)
+    @Column(name = "password", nullable = false, length = 80)
     private String password;
 
 }
