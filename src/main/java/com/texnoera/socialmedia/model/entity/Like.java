@@ -17,6 +17,13 @@ public class Like {
     @Column(name = "id")
     private Integer id;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
+
+    @ManyToOne
+    @JoinColumn(name = "post_id", nullable = false)
+    private Post post;
 
 }

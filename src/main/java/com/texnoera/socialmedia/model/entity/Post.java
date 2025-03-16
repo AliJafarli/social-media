@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 
+import java.util.Set;
+
 @Data
 @Entity
 @Table(name = "posts")
@@ -17,4 +19,18 @@ public class Post {
     @Size(min = 1, max = 1000)
     @Column(name = "content", nullable = false)
     private String content;
+
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private Set<Like> likes;
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private Set<PostImage> postImages;
+
+    @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
+    private Set<Comment> comments;
 }
