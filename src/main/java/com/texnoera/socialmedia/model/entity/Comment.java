@@ -20,7 +20,7 @@ public class Comment {
 
     @Size(min = 1, max = 400)
     @Column(name = "comment_text", nullable = false)
-    private String text;
+    private String commentText;
 
     @ManyToOne
     @JoinColumn(name = "post_id",nullable = false)
