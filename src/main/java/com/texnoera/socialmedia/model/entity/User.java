@@ -20,18 +20,22 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @Size(max=30)
-    @Column(name = "username", nullable = false, length = 30)
+    @Column(name = "username", nullable = false,unique = true, length = 30)
     private String username;
 
     @Size(max=50)
-    @Column(name = "user_full_name", nullable = false, length = 50)
+    @Column(name = "name", nullable = false, length = 50)
     private String name;
 
+    @Size(max=50)
+    @Column(name = "last_name", nullable = false, length = 50)
+    private String lastName;
+
     @Email
-    @Column(name = "email", nullable = false)
+    @Column(name = "email", nullable = false,unique = true)
     private String email;
 
     @Size(max=80)

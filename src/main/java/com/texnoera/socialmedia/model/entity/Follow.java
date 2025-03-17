@@ -15,13 +15,13 @@ public class Follow {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "user_following_id",nullable = false)
+    @JoinColumn(name = "user_following_id", nullable = false)
     private User following;
 }
