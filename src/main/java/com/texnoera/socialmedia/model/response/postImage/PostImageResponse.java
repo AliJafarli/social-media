@@ -1,0 +1,17 @@
+package com.texnoera.socialmedia.model.response.postImage;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class PostImageResponse {
+
+    private Long id;
+    private String name;
+    private String type;
+    private byte[] data;
+    private Long postId;
+}
