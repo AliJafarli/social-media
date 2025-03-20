@@ -15,12 +15,7 @@ properties:
  format_sql: true
 
 
-logging:
- level:
-  org.springframework: DEBUG
-  org.hibernate: DEBUG
 
- #server:
-#  servlet: context-path=/
+
 
 
