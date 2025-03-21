@@ -5,11 +5,13 @@ import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.service.abstracts.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     @Override
     public List<UserResponse> getAll() {

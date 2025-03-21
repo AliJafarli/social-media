@@ -3,11 +3,13 @@ package com.texnoera.socialmedia.service.concretes;
 import com.texnoera.socialmedia.model.request.LikeRequest;
 import com.texnoera.socialmedia.model.response.like.LikeResponse;
 import com.texnoera.socialmedia.service.abstracts.LikeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
     @Override
     public List<LikeResponse> getAllByPost(Long postId) {
