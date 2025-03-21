@@ -4,11 +4,13 @@ import com.texnoera.socialmedia.model.request.CommentAddRequest;
 import com.texnoera.socialmedia.model.request.CommentUpdateRequest;
 import com.texnoera.socialmedia.model.response.comment.CommentGetResponse;
 import com.texnoera.socialmedia.service.abstracts.CommentService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     @Override
     public void add(CommentAddRequest commentAddRequest) {

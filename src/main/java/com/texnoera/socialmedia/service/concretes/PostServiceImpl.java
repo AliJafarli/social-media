@@ -4,11 +4,13 @@ import com.texnoera.socialmedia.model.entity.Post;
 import com.texnoera.socialmedia.model.request.PostAddRequest;
 import com.texnoera.socialmedia.model.response.post.PostGetResponse;
 import com.texnoera.socialmedia.service.abstracts.PostService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
     @Override
     public List<PostGetResponse> getAll() {

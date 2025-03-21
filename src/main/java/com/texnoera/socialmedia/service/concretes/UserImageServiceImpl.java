@@ -2,10 +2,12 @@ package com.texnoera.socialmedia.service.concretes;
 
 import com.texnoera.socialmedia.model.response.userImage.UserImageResponse;
 import com.texnoera.socialmedia.service.abstracts.UserImageService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
+@RequiredArgsConstructor
 public class UserImageServiceImpl implements UserImageService {
     @Override
     public UserImageResponse upload(MultipartFile file, Long userId) {
