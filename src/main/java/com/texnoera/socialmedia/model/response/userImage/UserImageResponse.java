@@ -13,6 +13,6 @@ public class UserImageResponse {
     private String name;
     private String type;
     private byte[] data;
-    private Long postId;
+    private Long userId;
 
 }

@@ -21,7 +21,7 @@ public interface UserMapper {
     @Mapping(source = "following.username", target = "username")
     UserFollowingResponse followToFollowingResponse(Follow follow);
     @Mapping(source = "followers", target = "followers")
-    @Mapping(source = "following", target = "following")
+    @Mapping(source = "following", target = "followings")
     UserResponse userToResponse(User user);
 
     User requestToUser(UserAddRequest userAddRequest);
