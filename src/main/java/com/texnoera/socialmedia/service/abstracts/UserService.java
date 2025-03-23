@@ -2,6 +2,7 @@ package com.texnoera.socialmedia.service.abstracts;
 
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.UserAddRequest;
+import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 
@@ -17,4 +18,5 @@ public interface UserService {
     User getById(Long id);
     void add(UserAddRequest userAddRequest);
     void delete(Long id);
+    UserResponse update(Long id, UserUpdateRequest userUpdateRequest);
 }
