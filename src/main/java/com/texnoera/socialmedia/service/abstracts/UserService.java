@@ -16,7 +16,7 @@ public interface UserService {
     List<UserFollowingResponse> getUserFollowing(Long userId);
     boolean isFollowing(Long userId, Long followingId);
     User getById(Long id);
-    void add(UserAddRequest userAddRequest);
+    UserResponse add(UserAddRequest userAddRequest);
     void delete(Long id);
     UserResponse update(Long id, UserUpdateRequest userUpdateRequest);
 }
