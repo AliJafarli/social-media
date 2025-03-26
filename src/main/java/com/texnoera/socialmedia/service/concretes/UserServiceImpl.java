@@ -60,9 +60,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void add(UserAddRequest userAddRequest) {
+    public UserResponse add(UserAddRequest userAddRequest) {
         User user = userMapper.requestToUser(userAddRequest);
         userRepository.save(user);
+        return userMapper.userToResponse(user);
     }
 
 
