@@ -10,6 +10,6 @@ public interface LikeService {
     List<LikeResponse> getAllByPost(Long postId);
     List<LikeResponse> getAllByUser(Long userId);
     boolean isLiked(Long userId, Long postId);
-    void add(LikeRequest likeRequest);
+    LikeResponse add(LikeRequest likeRequest);
     void delete(LikeRequest likeRequest);
 }

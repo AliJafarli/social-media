@@ -38,12 +38,13 @@ public class LikeServiceImpl implements LikeService {
     }
 
     @Override
-    public void add(LikeRequest likeRequest) {
+    public LikeResponse add(LikeRequest likeRequest) {
         if (isLiked(likeRequest.getUserId(), likeRequest.getPostId())) {
-            return;
+            return new LikeResponse();
         }
         Like like = likeMapper.requestToLike(likeRequest);
         likeRepository.save(like);
+        return likeMapper.likeToPostLikeResponse(like);
 
     }
 
