@@ -5,6 +5,7 @@ import com.texnoera.socialmedia.model.entity.Comment;
 import com.texnoera.socialmedia.model.request.CommentAddRequest;
 import com.texnoera.socialmedia.model.request.CommentUpdateRequest;
 import com.texnoera.socialmedia.model.response.comment.CommentGetResponse;
+import com.texnoera.socialmedia.model.response.post.PostGetResponse;
 import com.texnoera.socialmedia.repository.CommentRepository;
 import com.texnoera.socialmedia.service.abstracts.CommentService;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +21,10 @@ public class CommentServiceImpl implements CommentService {
     private final CommentMapper commentMapper;
 
     @Override
-    public void add(CommentAddRequest commentAddRequest) {
+    public CommentGetResponse add(CommentAddRequest commentAddRequest) {
         Comment comment = commentMapper.addRequestToComment(commentAddRequest);
         commentRepository.save(comment);
+        return commentMapper.commentToResponse(comment);
     }
 
     @Override
