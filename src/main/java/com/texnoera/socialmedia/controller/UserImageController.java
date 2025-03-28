@@ -37,9 +37,10 @@ public class UserImageController {
     public ResponseEntity<byte[]> download(@PathVariable Long userId) {
         log.info("Received request to download image for userId={}", userId);
         byte[] image = userImageService.download(userId);
-        log.info("Successfully retrieved image for userId={}", userId);
-        return ResponseEntity.status(HttpStatus.OK).
-                contentType(MediaType.IMAGE_PNG).
-                body(image);
+        log.info("Image retrieval status for userId={} - {}", userId, (image != null ? "Found" : "Not Found"));
+        return image != null ?
+                ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_PNG).body(image) :
+                ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
 }
