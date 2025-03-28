@@ -1,7 +1,9 @@
 package com.texnoera.socialmedia.service.concretes;
 
 import com.texnoera.socialmedia.mapper.FollowMapper;
+import com.texnoera.socialmedia.model.entity.Follow;
 import com.texnoera.socialmedia.model.request.FollowRequest;
+import com.texnoera.socialmedia.model.response.follow.FollowResponse;
 import com.texnoera.socialmedia.repository.FollowRepository;
 import com.texnoera.socialmedia.service.abstracts.FollowService;
 import com.texnoera.socialmedia.service.abstracts.UserService;
@@ -17,12 +19,14 @@ public class FollowServiceImpl implements FollowService {
     private final UserService userService;
 
     @Override
-    public void add(FollowRequest followAddRequest) {
+    public FollowResponse add(FollowRequest followAddRequest) {
 
         if (userService.isFollowing(followAddRequest.getUserId(), followAddRequest.getFollowingId())) {
-            return;
+            throw new RuntimeException("Already following");
         }
-        followRepository.save(followMapper.addRequestToFollow(followAddRequest));
+        Follow follow = followMapper.addRequestToFollow(followAddRequest);
+        followRepository.save(follow);
+        return followMapper.followToResponse(follow);
     }
 
     @Override

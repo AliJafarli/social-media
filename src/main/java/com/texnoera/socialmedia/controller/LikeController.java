@@ -56,7 +56,7 @@ public class LikeController {
     }
 
     @DeleteMapping("/delete")
-    public ResponseEntity<LikeResponse> deleteLike(@RequestBody LikeRequest likeRequest) {
+    public ResponseEntity<Void> deleteLike(@RequestBody LikeRequest likeRequest) {
         log.info("Received request to delete like for user {}", likeRequest.getUserId());
         likeService.delete(likeRequest);
         log.info("Successfully deleted like for user {}", likeRequest.getUserId());
