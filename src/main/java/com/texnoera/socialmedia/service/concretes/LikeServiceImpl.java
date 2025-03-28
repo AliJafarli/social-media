@@ -40,7 +40,7 @@ public class LikeServiceImpl implements LikeService {
     @Override
     public LikeResponse add(LikeRequest likeRequest) {
         if (isLiked(likeRequest.getUserId(), likeRequest.getPostId())) {
-            return new LikeResponse();
+            throw new RuntimeException("Already liked");
         }
         Like like = likeMapper.requestToLike(likeRequest);
         likeRepository.save(like);
