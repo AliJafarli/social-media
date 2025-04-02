@@ -3,7 +3,7 @@ package com.texnoera.socialmedia.service.concretes;
 import com.texnoera.socialmedia.mapper.UserImageMapper;
 import com.texnoera.socialmedia.model.entity.UserImage;
 import com.texnoera.socialmedia.model.response.userImage.UserImageResponse;
-import com.texnoera.socialmedia.model.result.ImageNotFoundException;
+import com.texnoera.socialmedia.exception.ImageNotFoundException;
 import com.texnoera.socialmedia.repository.UserImageRepository;
 import com.texnoera.socialmedia.service.abstracts.UserImageService;
 import com.texnoera.socialmedia.service.abstracts.UserService;
