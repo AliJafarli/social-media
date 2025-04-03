@@ -1,0 +1,43 @@
+package com.texnoera.socialmedia.controller;
+
+import com.texnoera.socialmedia.exception.constants.ApiLogMessage;
+import com.texnoera.socialmedia.model.request.LoginRequest;
+import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
+import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
+import com.texnoera.socialmedia.service.abstracts.AuthService;
+import com.texnoera.socialmedia.utils.ApiUtils;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@Log4j2
+@Validated
+@RestController
+@RequiredArgsConstructor
+@RequestMapping("/api/v1/auth")
+public class AuthController {
+    private final AuthService authService;
+
+    @PostMapping("/login")
+    public ResponseEntity<?> login(
+            @RequestBody @Valid LoginRequest request,
+            HttpServletResponse response) {
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<UserProfileResponse> result = authService.login(request);
+        Cookie authorizationCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
+        response.addCookie(authorizationCookie);
+
+        return ResponseEntity.ok(result);
+
+
+    }
+}
