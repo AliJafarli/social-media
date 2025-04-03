@@ -8,6 +8,7 @@ import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.role.RoleResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowerResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
+import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -39,6 +40,12 @@ public interface UserMapper {
     List<UserFollowingResponse> followsToFollowingResponses(List<Follow> follows);
 
     void update(@MappingTarget User user, UserUpdateRequest userUpdateRequest);
+
+    @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
+    @Mapping(target = "username", source = "user.username")
+    @Mapping(target = "email", source = "user.email")
+    @Mapping(target = "token", source = "token")
+    UserProfileResponse toUserProfileResponse(User user, String token);
 
 
     default List<RoleResponse> mapRoles(Collection<Role> roles) {
