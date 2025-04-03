@@ -5,10 +5,11 @@ import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
 import java.util.List;
 
-public interface UserService {
+public interface UserService extends UserDetailsService {
 
     List<UserResponse> getAll();
     UserResponse getResponseById(Long id);
