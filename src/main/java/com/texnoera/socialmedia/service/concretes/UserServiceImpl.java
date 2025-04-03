@@ -16,13 +16,18 @@ import com.texnoera.socialmedia.repository.UserRepository;
 import com.texnoera.socialmedia.security.enums.SocialMediaUserRole;
 import com.texnoera.socialmedia.service.abstracts.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -99,4 +104,21 @@ public class UserServiceImpl implements UserService {
         userRepository.deleteById(id);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+return getUserDetails(email, userRepository);
+    }
+
+    static UserDetails getUserDetails(String email, UserRepository userRepository) {
+        User user = userRepository.findUserByEmail(email).orElseThrow(()-> new NotFoundException(ExceptionConstants.NOT_FOUND_EXCEPTION.getUserMessage()));
+        user.setLastLogin(LocalDateTime.now());
+        userRepository.save(user);
+        return new org.springframework.security.core.userdetails.User(
+                user.getEmail(),
+                user.getPassword(),
+                user.getRoles().stream()
+                        .map(role -> new SimpleGrantedAuthority(role.getName()))
+                        .collect(Collectors.toList())
+        );
+    }
 }
