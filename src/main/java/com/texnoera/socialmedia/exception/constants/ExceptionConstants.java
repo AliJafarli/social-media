@@ -24,6 +24,16 @@ public enum ExceptionConstants {
     INVALID_GROUP_ID("Invalid group id", BAD_REQUEST),
     SELECTED_LIMIT_EXCEPTION("Category limit exceed", BAD_REQUEST),
 
+    POST_NOT_FOUND_BY_ID("Post with ID: %s was not found", NOT_FOUND),
+    POST_ALREADY_EXISTS("Post with Title: %s already exists", CONFLICT),
+    USER_NOT_FOUND_BY_ID("User with ID: %s was not found", NOT_FOUND),
+    USERNAME_ALREADY_EXISTS("Username: %s already exists", CONFLICT),
+    USERNAME_NOT_FOUND("Username: %s was not found", NOT_FOUND),
+    EMAIL_ALREADY_EXISTS("Email: %s already exists", CONFLICT),
+    EMAIL_NOT_FOUND("Email: %s was not found", NOT_FOUND),
+    USER_ROLE_NOT_FOUND("Role was not found", NOT_FOUND),
+    COMMENT_NOT_FOUND_BY_ID("Comment with ID: %s was not found", NOT_FOUND),
+
 
     TOKEN_EXPIRED("Token expired", UNAUTHORIZED),
     UNEXPECTED_ERROR_OCCURRED("Unexpected error occurred", INTERNAL_SERVER_ERROR),
@@ -40,12 +50,13 @@ public enum ExceptionConstants {
             + ApiConstants.REQUIRED_MIN_LETTERS_NUMBER_EVERY_CASE_IN_PASSWORD + " letter(s) in upper and lower cases, "
             + ApiConstants.REQUIRED_MIN_CHARACTERS_NUMBER_IN_PASSWORD + " character(s), "
             + ApiConstants.REQUIRED_MIN_DIGITS_NUMBER_IN_PASSWORD + " digit(s).", BAD_REQUEST),
-    HAVE_NO_ACCESS("You don't have the necessary permissions", FORBIDDEN)
-    ;
-
-
+    HAVE_NO_ACCESS("You don't have the necessary permissions", FORBIDDEN);
 
 
     private final String userMessage;
     private final HttpStatus httpStatus;
+
+    public String getMessage(Object... args) {
+        return String.format(userMessage, args);
+    }
 }
