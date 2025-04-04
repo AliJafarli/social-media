@@ -2,6 +2,7 @@ package com.texnoera.socialmedia.controller;
 
 import com.texnoera.socialmedia.exception.constants.ApiLogMessage;
 import com.texnoera.socialmedia.model.request.LoginRequest;
+import com.texnoera.socialmedia.model.request.RegistrationUserRequest;
 import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.service.abstracts.AuthService;
@@ -45,6 +46,19 @@ public class AuthController {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
         IamResponse<UserProfileResponse> result = authService.refreshAccessToken(refreshToken);
+        Cookie authorizationCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
+        response.addCookie(authorizationCookie);
+
+        return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<?> register(
+            @RequestBody @Valid RegistrationUserRequest request,
+            HttpServletResponse response) {
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<UserProfileResponse> result = authService.registerUser(request);
         Cookie authorizationCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
         response.addCookie(authorizationCookie);
 

@@ -3,6 +3,8 @@ package com.texnoera.socialmedia.mapper;
 import com.texnoera.socialmedia.model.entity.Follow;
 import com.texnoera.socialmedia.model.entity.Role;
 import com.texnoera.socialmedia.model.entity.User;
+import com.texnoera.socialmedia.model.enums.RegistrationStatus;
+import com.texnoera.socialmedia.model.request.RegistrationUserRequest;
 import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.role.RoleResponse;
@@ -10,14 +12,19 @@ import com.texnoera.socialmedia.model.response.user.UserFollowerResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
 import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
+import org.hibernate.type.descriptor.DateTimeUtils;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        imports = {RegistrationStatus.class, Objects.class, DateTimeUtils.class})
 public interface UserMapper {
 
     @Mapping(source = "user.id", target = "userId")
@@ -46,7 +53,13 @@ public interface UserMapper {
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "token", source = "token")
     @Mapping(target = "refreshToken", source = "refreshToken")
-    UserProfileResponse toUserProfileResponse(User user, String token , String refreshToken);
+    UserProfileResponse toUserProfileResponse(User user, String token, String refreshToken);
+
+
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "roles", ignore = true)
+    @Mapping(target = "registrationStatus", expression = "java(RegistrationStatus.ACTIVE)")
+    User fromDto(RegistrationUserRequest request);
 
 
     default List<RoleResponse> mapRoles(Collection<Role> roles) {
