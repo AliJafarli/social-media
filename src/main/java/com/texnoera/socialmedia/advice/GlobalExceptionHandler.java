@@ -1,14 +1,17 @@
 package com.texnoera.socialmedia.advice;
 
 import com.texnoera.socialmedia.exception.AppException;
+import com.texnoera.socialmedia.exception.InvalidPasswordException;
 import com.texnoera.socialmedia.exception.response.ExceptionResponse;
 import com.texnoera.socialmedia.exception.response.ValidationErrorResponse;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
@@ -25,6 +28,13 @@ import static org.springframework.http.HttpStatus.BAD_REQUEST;
 @Log4j2
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(InvalidPasswordException.class)
+    public String handleInvalidPasswordException(InvalidPasswordException ex) {
+        return ex.getMessage();
+    }
 
     @ExceptionHandler(Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
