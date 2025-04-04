@@ -11,8 +11,8 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
-    @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "user.username", target = "username")
+
+
     PostGetResponse postToGetResponse(Post post);
 
     @Mapping(source = "userId", target = "user.id")

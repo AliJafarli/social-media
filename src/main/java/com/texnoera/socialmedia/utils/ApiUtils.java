@@ -6,6 +6,7 @@ import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -34,5 +35,9 @@ public class ApiUtils {
 
     public static String generateUuidWithoutDash(){
         return UUID.randomUUID().toString().replace(ApiConstants.DASH, "");
+    }
+
+    public static String getCurrentUsername() {
+        return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 }

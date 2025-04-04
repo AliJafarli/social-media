@@ -1,11 +1,17 @@
 package com.texnoera.socialmedia.service.concretes;
 
+import com.texnoera.socialmedia.exception.NotFoundException;
+import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.mapper.PostMapper;
 import com.texnoera.socialmedia.model.entity.Post;
+import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.PostAddRequest;
 import com.texnoera.socialmedia.model.response.post.PostGetResponse;
+import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
 import com.texnoera.socialmedia.repository.PostRepository;
+import com.texnoera.socialmedia.repository.UserRepository;
+import com.texnoera.socialmedia.security.validation.AccessValidator;
 import com.texnoera.socialmedia.service.abstracts.PostService;
 import com.texnoera.socialmedia.service.abstracts.UserService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +28,8 @@ public class PostServiceImpl implements PostService {
     private final PostRepository postRepository;
     private final PostMapper postMapper;
     private final UserService userService;
+    private final UserRepository userRepository;
+    private final AccessValidator accessValidator;
 
     @Override
     public List<PostGetResponse> getAll() {
@@ -38,8 +46,10 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getById(Long id) {
-        return postRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("post not found"));
+        Post post = postRepository.findById(id).orElseThrow(() ->
+                new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getMessage()));
+
+        return post;
     }
 
     @Override
@@ -60,14 +70,23 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public Long add(PostAddRequest postAddRequest) {
+    public IamResponse<PostGetResponse> add(PostAddRequest postAddRequest, String username) {
+        User user = userRepository.findByUsername(username).orElseThrow(() ->
+                new NotFoundException(ExceptionConstants.USERNAME_NOT_FOUND.getMessage(username)));
+
         Post post = postMapper.postAddRequestToPost(postAddRequest);
-        postRepository.save(post);
-        return post.getId();
+        post.setUser(user);
+        post.setCreatedBy(username);
+        Post savedPost = postRepository.save(post);
+        PostGetResponse postGetResponse = postMapper.postToGetResponse(savedPost);
+        return IamResponse.createSuccessful(postGetResponse);
     }
 
     @Override
     public void delete(Long id) {
+        Post post = postRepository.findById(id).orElseThrow(() ->
+                new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getMessage()));
+        accessValidator.validateAdminOrOwnerAccess(post.getUser().getUsername(), post.getCreatedBy());
         postRepository.deleteById(id);
     }
 }
