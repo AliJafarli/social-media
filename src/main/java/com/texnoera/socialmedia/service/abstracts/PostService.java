@@ -3,6 +3,7 @@ package com.texnoera.socialmedia.service.abstracts;
 import com.texnoera.socialmedia.model.entity.Post;
 import com.texnoera.socialmedia.model.request.PostAddRequest;
 import com.texnoera.socialmedia.model.response.post.PostGetResponse;
+import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 
 import java.util.List;
 
@@ -13,6 +14,6 @@ public interface PostService {
     Post getById(Long id);
     List<PostGetResponse> getAllByUser(Long userId);
     List<PostGetResponse> getByUserFollowing(Long userId);
-    Long add(PostAddRequest postAddRequest);
+    IamResponse<PostGetResponse> add(PostAddRequest postAddRequest, String username);
     void delete(Long id);
 }
