@@ -15,9 +15,11 @@ import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.repository.RoleRepository;
 import com.texnoera.socialmedia.repository.UserRepository;
 import com.texnoera.socialmedia.security.JwtTokenProvider;
+import com.texnoera.socialmedia.security.validation.AccessValidator;
 import com.texnoera.socialmedia.service.abstracts.AuthService;
 import com.texnoera.socialmedia.service.abstracts.RefreshTokenService;
 import com.texnoera.socialmedia.service.model.IamServiceUserRole;
+import com.texnoera.socialmedia.utils.PasswordUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +43,7 @@ public class AuthServiceImpl implements AuthService {
     private final RefreshTokenService refreshTokenService;
     private final RoleRepository roleRepository;
     private final PasswordEncoder passwordEncoder;
+    private final AccessValidator accessValidator;
 
 
     @Override
@@ -76,13 +79,12 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public IamResponse<UserProfileResponse> registerUser(@NotNull RegistrationUserRequest request) {
-        userRepository.findByUsername(request.getUsername()).ifPresent(existingUser -> {
-            throw new DataExistException(ExceptionConstants.USERNAME_ALREADY_EXISTS.getMessage(request.getUsername()));
-        });
-
-        userRepository.findUserByEmail(request.getEmail()).ifPresent(existingEmail -> {
-            throw new DataExistException(ExceptionConstants.EMAIL_ALREADY_EXISTS.getMessage(request.getEmail()));
-        });
+        accessValidator.validateNewUser(
+                request.getUsername(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getConfirmPassword()
+        );
 
         Role userRole = roleRepository.findByName(IamServiceUserRole.USER.getRole())
                 .orElseThrow(()->new NotFoundException(ExceptionConstants.USER_ROLE_NOT_FOUND.getMessage()));
