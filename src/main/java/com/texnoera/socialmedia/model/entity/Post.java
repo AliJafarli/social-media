@@ -37,9 +37,14 @@ public class Post {
     @OneToMany(mappedBy = "post",cascade = CascadeType.ALL)
     private Set<Comment> comments;
 
+    @Column(nullable = false)
+    private Boolean deleted = false;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
     @CreationTimestamp
     private LocalDateTime createdAt;
 
-    @UpdateTimestamp
-    private LocalDateTime updatedAt;
+
 }
