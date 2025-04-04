@@ -1,5 +1,7 @@
 package com.texnoera.socialmedia.service.concretes;
 
+import com.texnoera.socialmedia.exception.NotFoundException;
+import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.model.entity.RefreshToken;
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.repository.RefreshTokenRepository;
@@ -32,5 +34,15 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
                     newToken.setToken(ApiUtils.generateUuidWithoutDash());
                     return refreshTokenRepository.save(newToken);
                 });
+    }
+
+    @Override
+    public RefreshToken validateAndRefreshToken(String requestRefreshToken) {
+        RefreshToken refreshToken = refreshTokenRepository.findByToken(requestRefreshToken)
+                .orElseThrow(()->new NotFoundException(ExceptionConstants.NOT_FOUND_REFRESH_TOKEN.getUserMessage()));
+
+        refreshToken.setCreated(LocalDateTime.now());
+        refreshToken.setToken(ApiUtils.generateUuidWithoutDash());
+        return refreshTokenRepository.save(refreshToken);
     }
 }

@@ -3,6 +3,7 @@ package com.texnoera.socialmedia.service.concretes;
 import com.texnoera.socialmedia.exception.InvalidDataException;
 import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.mapper.UserMapper;
+import com.texnoera.socialmedia.model.entity.RefreshToken;
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.LoginRequest;
 import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
@@ -10,6 +11,7 @@ import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.repository.UserRepository;
 import com.texnoera.socialmedia.security.JwtTokenProvider;
 import com.texnoera.socialmedia.service.abstracts.AuthService;
+import com.texnoera.socialmedia.service.abstracts.RefreshTokenService;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,24 +28,36 @@ public class AuthServiceImpl implements AuthService {
     private final UserMapper userMapper;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
+    private final RefreshTokenService refreshTokenService;
 
 
     @Override
     public IamResponse<UserProfileResponse> login(@NotNull LoginRequest request) {
-        try{
+        try {
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
             );
-        } catch (BadCredentialsException e){
+        } catch (BadCredentialsException e) {
             throw new InvalidDataException(ExceptionConstants.INVALID_USER_OR_PASSWORD.getUserMessage());
         }
-User user = userRepository.findUserByEmailAndDeletedFalse(request.getEmail())
-        .orElseThrow(() -> new InvalidDataException(ExceptionConstants.INVALID_USER_OR_PASSWORD.getUserMessage()));
+        User user = userRepository.findUserByEmailAndDeletedFalse(request.getEmail())
+                .orElseThrow(() -> new InvalidDataException(ExceptionConstants.INVALID_USER_OR_PASSWORD.getUserMessage()));
 
         String token = jwtTokenProvider.generateToken(user);
-        UserProfileResponse userProfileResponse = userMapper.toUserProfileResponse(user,token);
+        UserProfileResponse userProfileResponse = userMapper.toUserProfileResponse(user, token);
         userProfileResponse.setToken(token);
 
         return IamResponse.createSuccessfulWithNewToken(userProfileResponse);
+    }
+
+    @Override
+    public IamResponse<UserProfileResponse> refreshAccessToken(String refreshTokenValue) {
+        RefreshToken refreshToken = refreshTokenService.validateAndRefreshToken(refreshTokenValue);
+        User user = refreshToken.getUser();
+
+        String accessToken = jwtTokenProvider.generateToken(user);
+
+        return IamResponse.createSuccessfulWithNewToken(
+                userMapper.toUserProfileResponse(user, accessToken));
     }
 }

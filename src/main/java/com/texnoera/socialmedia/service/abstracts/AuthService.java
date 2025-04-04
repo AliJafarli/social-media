@@ -8,7 +8,7 @@ public interface AuthService {
 
     IamResponse<UserProfileResponse> login(LoginRequest request);
 
-//    IamResponse<UserProfileResponse> refreshAccessToken(String refreshToken);
+    IamResponse<UserProfileResponse> refreshAccessToken(String refreshToken);
 
 //    IamResponse<UserProfileResponse> registerUser(RegistrationUserRequest request);
 
