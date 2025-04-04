@@ -43,8 +43,9 @@ public class AuthServiceImpl implements AuthService {
         User user = userRepository.findUserByEmailAndDeletedFalse(request.getEmail())
                 .orElseThrow(() -> new InvalidDataException(ExceptionConstants.INVALID_USER_OR_PASSWORD.getUserMessage()));
 
+        RefreshToken refreshToken = refreshTokenService.generateOrUpdateRefreshToken(user);
         String token = jwtTokenProvider.generateToken(user);
-        UserProfileResponse userProfileResponse = userMapper.toUserProfileResponse(user, token);
+        UserProfileResponse userProfileResponse = userMapper.toUserProfileResponse(user, token, refreshToken.getToken());
         userProfileResponse.setToken(token);
 
         return IamResponse.createSuccessfulWithNewToken(userProfileResponse);
@@ -58,6 +59,6 @@ public class AuthServiceImpl implements AuthService {
         String accessToken = jwtTokenProvider.generateToken(user);
 
         return IamResponse.createSuccessfulWithNewToken(
-                userMapper.toUserProfileResponse(user, accessToken));
+                userMapper.toUserProfileResponse(user, accessToken, refreshToken.getToken()));
     }
 }
