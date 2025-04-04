@@ -13,10 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Log4j2
 @Validated
@@ -39,5 +36,18 @@ public class AuthController {
         return ResponseEntity.ok(result);
 
 
+    }
+
+    @GetMapping("/refresh/token")
+    public ResponseEntity<IamResponse<UserProfileResponse>> refreshToken(
+            @RequestParam(name = "token") String refreshToken,
+            HttpServletResponse response) {
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
+
+        IamResponse<UserProfileResponse> result = authService.refreshAccessToken(refreshToken);
+        Cookie authorizationCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
+        response.addCookie(authorizationCookie);
+
+        return ResponseEntity.ok(result);
     }
 }

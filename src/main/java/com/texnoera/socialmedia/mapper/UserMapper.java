@@ -45,7 +45,8 @@ public interface UserMapper {
     @Mapping(target = "username", source = "user.username")
     @Mapping(target = "email", source = "user.email")
     @Mapping(target = "token", source = "token")
-    UserProfileResponse toUserProfileResponse(User user, String token);
+    @Mapping(target = "refreshToken", source = "refreshToken")
+    UserProfileResponse toUserProfileResponse(User user, String token , String refreshToken);
 
 
     default List<RoleResponse> mapRoles(Collection<Role> roles) {
