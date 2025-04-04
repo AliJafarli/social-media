@@ -2,10 +2,13 @@ package com.texnoera.socialmedia.utils;
 
 import com.texnoera.socialmedia.model.constants.ApiConstants;
 import com.texnoera.socialmedia.security.JwtTokenProvider;
+import io.micrometer.common.util.StringUtils;
 import jakarta.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
+
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -27,5 +30,9 @@ public class ApiUtils {
         authorizationCookie.setPath("/");
         authorizationCookie.setMaxAge(300);
         return authorizationCookie;
+    }
+
+    public static String generateUuidWithoutDash(){
+        return UUID.randomUUID().toString().replace(ApiConstants.DASH, "");
     }
 }
