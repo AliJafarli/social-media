@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class FollowResponse {
 
-    private Long id;
-    private Long followerId;
-    private Long followingId;
+    private Integer id;
+    private Integer followerId;
+    private Integer followingId;
     private String followerUsername;
     private String followingUsername;
 }

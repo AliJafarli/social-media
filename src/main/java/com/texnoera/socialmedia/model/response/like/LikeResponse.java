@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LikeResponse {
 
-    private Long id;
-    private Long userId;
+    private Integer id;
+    private Integer userId;
     private String username;
 }

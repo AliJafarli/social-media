@@ -20,19 +20,19 @@ public class LikeServiceImpl implements LikeService {
     private final LikeMapper likeMapper;
 
     @Override
-    public List<LikeResponse> getAllByPost(Long postId) {
+    public List<LikeResponse> getAllByPost(Integer postId) {
         List<Like> likes = likeRepository.findAllByPost_Id(postId);
         return likeMapper.likesToLikeResponses(likes);
     }
 
     @Override
-    public List<LikeResponse> getAllByUser(Long userId) {
+    public List<LikeResponse> getAllByUser(Integer userId) {
         List<Like> likes = likeRepository.findAllByUser_Id(userId);
         return likeMapper.likesToLikeResponses(likes);
     }
 
     @Override
-    public boolean isLiked(Long userId, Long postId) {
+    public boolean isLiked(Integer userId, Integer postId) {
         Optional<Like> like = likeRepository.findByUser_IdAndPost_Id(userId, postId);
         return like.isPresent();
     }

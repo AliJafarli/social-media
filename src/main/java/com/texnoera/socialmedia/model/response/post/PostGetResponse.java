@@ -13,7 +13,7 @@ import java.util.Set;
 @AllArgsConstructor
 public class PostGetResponse {
 
-    private Long id;
+    private Integer id;
     private String content;
     private Set<Like> likes;
     private LocalDateTime created;

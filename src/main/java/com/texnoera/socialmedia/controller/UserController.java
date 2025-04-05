@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/get-all-users")
+    @GetMapping("/users/all")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         log.info("Received request to get all users");
         List<UserResponse> users = userService.getAll();
@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserResponse> getUserById(@PathVariable Long id) {
+    public ResponseEntity<UserResponse> getUserById(@PathVariable Integer id) {
         log.info("Received request to get user with ID: {}", id);
         UserResponse userResponse = userService.getResponseById(id);
         log.info("Successfully retrieved user with ID: {}", id);
@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @GetMapping("/is-following")
-    public ResponseEntity<Boolean> isFollowing(@RequestParam Long userId, @RequestParam Long followingId) {
+    public ResponseEntity<Boolean> isFollowing(@RequestParam Integer userId, @RequestParam Integer followingId) {
         log.info("Received request to check if user with ID: {} is following user with ID: {}", userId, followingId);
         Boolean isFollowing = userService.isFollowing(userId, followingId);
         log.info("User with ID: {} is following user with ID: {}: {}", userId, followingId, isFollowing);
@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<UserResponse> updateUser(@PathVariable Long id, @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
+    public ResponseEntity<UserResponse> updateUser(@PathVariable Integer id, @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
         log.info("Received request to update user with ID: {}: {}", id, userUpdateRequest);
         UserResponse userResponse = userService.update(id, userUpdateRequest);
         log.info("Successfully updated user with ID: {}: {}", id, userResponse);
@@ -65,7 +65,7 @@ public class UserController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<Void> delete(@PathVariable Integer id) {
         log.info("Received request to delete user with ID: {}", id);
         userService.delete(id);
         log.info("Successfully deleted user with ID: {}", id);

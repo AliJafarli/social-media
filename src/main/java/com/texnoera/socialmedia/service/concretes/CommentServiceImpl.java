@@ -34,31 +34,31 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentGetResponse getById(Long id) {
+    public CommentGetResponse getById(Integer id) {
         Comment comment = commentRepository.findById(id).orElse(null);
         return commentMapper.commentToResponse(comment);
     }
 
     @Override
-    public List<CommentGetResponse> getAllByPost(Long postId) {
+    public List<CommentGetResponse> getAllByPost(Integer postId) {
         List<Comment> comments = commentRepository.findAllByPost_Id(postId);
         return commentMapper.commentsToResponses(comments);
     }
 
     @Override
-    public List<CommentGetResponse> getAllByUser(Long userId) {
+    public List<CommentGetResponse> getAllByUser(Integer userId) {
         List<Comment> comments = commentRepository.findAllByUser_Id(userId);
         return commentMapper.commentsToResponses(comments);
     }
 
     @Override
-    public void update(Long id, CommentUpdateRequest commentUpdateRequest) {
+    public void update(Integer id, CommentUpdateRequest commentUpdateRequest) {
 
         commentRepository.findById(id).ifPresent(commentToUpdate -> commentToUpdate.setCommentText(commentUpdateRequest.getCommentText()));
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         commentRepository.deleteById(id);
     }
 }

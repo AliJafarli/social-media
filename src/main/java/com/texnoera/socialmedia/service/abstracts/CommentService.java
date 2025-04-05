@@ -11,9 +11,9 @@ public interface CommentService {
 
     CommentGetResponse add(CommentAddRequest commentAddRequest);
     List<CommentGetResponse> getAll();
-    CommentGetResponse getById(Long id);
-    List<CommentGetResponse> getAllByPost(Long postId);
-    List<CommentGetResponse> getAllByUser(Long userId);
-    void update(Long id, CommentUpdateRequest commentUpdateRequest);
-    void delete(Long id);
+    CommentGetResponse getById(Integer id);
+    List<CommentGetResponse> getAllByPost(Integer postId);
+    List<CommentGetResponse> getAllByUser(Integer userId);
+    void update(Integer id, CommentUpdateRequest commentUpdateRequest);
+    void delete(Integer id);
 }

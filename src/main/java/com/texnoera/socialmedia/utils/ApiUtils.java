@@ -40,4 +40,9 @@ public class ApiUtils {
     public static String getCurrentUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
+
+    public Integer getUserIdFromAuthentication() {
+        String jwtToken = SecurityContextHolder.getContext().getAuthentication().getCredentials().toString();
+        return Integer.parseInt(jwtTokenProvider.getUserId(jwtToken));
+    }
 }

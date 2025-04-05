@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 @Repository
-public interface UserImageRepository extends JpaRepository<UserImage, Long> {
+public interface UserImageRepository extends JpaRepository<UserImage, Integer> {
 
-    Optional<UserImage> findByUser_Id(Long userId);
+    Optional<UserImage> findByUser_Id(Integer userId);
 }

@@ -20,7 +20,7 @@ import java.nio.file.AccessDeniedException;
 @RequiredArgsConstructor
 public class AccessValidator {
     private final UserRepository userRepository;
-//    private final ApiUtils apiUtils;
+    private final ApiUtils apiUtils;
 
     public void validateNewUser(String username, String email, String password, String confirmPassword) {
         userRepository.findByUsername(username).ifPresent(existingUser -> {
@@ -41,9 +41,9 @@ public class AccessValidator {
 
     }
 
-    public boolean isAdminOrSuperAdmin(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new NotFoundException(ExceptionConstants.USERNAME_NOT_FOUND.getMessage()));
+    public boolean isAdminOrSuperAdmin(Integer userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_ID.getMessage(userId)));
 
         return user.getRoles().stream()
                 .map(role -> IamServiceUserRole.fromName(role.getName()))
@@ -51,13 +51,12 @@ public class AccessValidator {
     }
 
     @SneakyThrows
-    public void validateAdminOrOwnerAccess(String ownerUsername, String createdBy) {
-        String currentUsername = ApiUtils.getCurrentUsername();
+    public void validateAdminOrOwnerAccess(Integer ownerId) {
+        Integer currentUserId = apiUtils.getUserIdFromAuthentication();
 
-        if (!currentUsername.equals(ownerUsername) &&
-                !currentUsername.equals(createdBy) &&
-                !isAdminOrSuperAdmin(currentUsername)) {
+        if (!currentUserId.equals(ownerId) && !isAdminOrSuperAdmin(currentUserId)) {
             throw new AccessDeniedException(ExceptionConstants.HAVE_NO_ACCESS.getMessage());
         }
     }
+
 }

@@ -7,6 +7,6 @@ import java.io.IOException;
 
 public interface UserImageService {
 
-    UserImageResponse upload(MultipartFile file, Long userId) throws IOException;
-    byte[] download(Long id);
+    UserImageResponse upload(MultipartFile file, Integer userId) throws IOException;
+    byte[] download(Integer id);
 }

@@ -32,7 +32,7 @@ public class CommentController {
     }
 
     @GetMapping("/get-all-by-post/{postId}")
-    public ResponseEntity<List<CommentGetResponse>> getAllCommentsByPostId(@PathVariable Long postId) {
+    public ResponseEntity<List<CommentGetResponse>> getAllCommentsByPostId(@PathVariable Integer postId) {
         log.info("Received request to get all comments by post ID {}", postId);
         List<CommentGetResponse> comments = commentService.getAllByPost(postId);
         log.info("Retrieved {} comments for post ID: {}", comments.size(), postId);
@@ -40,7 +40,7 @@ public class CommentController {
     }
 
     @GetMapping("/get-all-by-user/{userId}")
-    public ResponseEntity<List<CommentGetResponse>> getAllCommentsByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<CommentGetResponse>> getAllCommentsByUserId(@PathVariable Integer userId) {
         log.info("Received request to get comments for user ID: {}", userId);
         List<CommentGetResponse> comments = commentService.getAllByUser(userId);
         log.info("Retrieved {} comments for user ID: {}", comments.size(), userId);
@@ -57,7 +57,7 @@ public class CommentController {
 
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteComment(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteComment(@PathVariable Integer id) {
         log.info("Received request to delete comment with ID: {}", id);
         commentService.delete(id);
         log.info("Successfully deleted comment with ID: {}", id);

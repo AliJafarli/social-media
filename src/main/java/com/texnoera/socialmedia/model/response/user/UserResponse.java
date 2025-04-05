@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class UserResponse {
 
-    private Long id;
+    private Integer id;
     private String username;
     private String email;
     private List<UserFollowerResponse> followers;

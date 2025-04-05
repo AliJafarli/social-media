@@ -7,7 +7,7 @@ import java.io.IOException;
 
 public interface PostImageService {
 
-    PostImageResponse upload(MultipartFile file, Long postId) throws IOException;
-    byte[] download(Long id);
+    PostImageResponse upload(MultipartFile file, Integer postId) throws IOException;
+    byte[] download(Integer id);
 
 }

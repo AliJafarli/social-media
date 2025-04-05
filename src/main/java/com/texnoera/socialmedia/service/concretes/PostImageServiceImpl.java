@@ -23,7 +23,7 @@ public class PostImageServiceImpl implements PostImageService {
     private final PostService postService;
 
     @Override
-    public PostImageResponse upload(MultipartFile file, Long postId) throws IOException {
+    public PostImageResponse upload(MultipartFile file, Integer postId) throws IOException {
         PostImage postImage = new PostImage();
         postImage.setName(file.getOriginalFilename());
         postImage.setType(file.getContentType());
@@ -34,7 +34,7 @@ public class PostImageServiceImpl implements PostImageService {
     }
 
     @Override
-    public byte[] download(Long id) {
+    public byte[] download(Integer id) {
         Optional<PostImage> postImage = postImageRepository.findPostImageByPost_Id(id);
         return postImage.map(image -> ImageUtil.
                 decompressImage(image.getData())).orElse(null);

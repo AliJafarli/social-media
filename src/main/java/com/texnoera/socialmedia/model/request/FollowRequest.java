@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FollowRequest {
-    private Long userId;
-    private Long followingId;
+    private Integer userId;
+    private Integer followingId;
 
 }
