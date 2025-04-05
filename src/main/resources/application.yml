@@ -2,17 +2,11 @@ spring:
   application:
     name: social-media
 
-jwt:
-  secret: BoYdZCyOK7aeIssLz1YSh6mDZxb5xMY1vtA6Dg1gnw+T0bx67sQNV4n6T30ZGoO3mFIDnvhraK0jyIOjEXOdlw==
-  lifetime: 3600000
-  expiration: 103600000
-
   datasource:
     url: jdbc:postgresql://localhost:5432/social_media
     username: ${DB_USERNAME}
     password: ${DB_PASSWORD}
     driver-class-name: org.postgresql.Driver
-
   jpa:
     hibernate:
       ddl-auto: update
@@ -21,3 +15,11 @@ jwt:
     properties:
       hibernate:
         format_sql: true
+
+jwt:
+  secret: BoYdZCyOK7aeIssLz1YSh6mDZxb5xMY1vtA6Dg1gnw+T0bx67sQNV4n6T30ZGoO3mFIDnvhraK0jyIOjEXOdlw==
+  lifetime: 3600000
+  expiration: 103600000
+
+
+
