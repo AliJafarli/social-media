@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PostAddRequest {
 
-    private Long userId;
+    private Integer userId;
     private String content;
 }

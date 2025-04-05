@@ -24,7 +24,7 @@ public class PostImageController {
     private final PostImageService postImageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<PostImageResponse> upload(@RequestParam("image") MultipartFile file, @RequestParam Long postId) throws IOException {
+    public ResponseEntity<PostImageResponse> upload(@RequestParam("image") MultipartFile file, @RequestParam Integer postId) throws IOException {
         log.info("Received request to upload image for postId={}", postId);
         log.info("Uploading image with filename={} for postId={} with size={} bytes",
                 file.getOriginalFilename(), postId, file.getSize());
@@ -34,7 +34,7 @@ public class PostImageController {
     }
 
     @GetMapping("/download/{postId}")
-    public ResponseEntity<byte[]> download(@PathVariable Long postId) {
+    public ResponseEntity<byte[]> download(@PathVariable Integer postId) {
         log.info("Received request to download image for postId={}", postId);
         byte[] image = postImageService.download(postId);
         log.info("Image retrieval status for postId={} - {}", postId, (image != null ? "Found" : "Not Found"));

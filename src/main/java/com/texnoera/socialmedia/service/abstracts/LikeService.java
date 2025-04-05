@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface LikeService {
 
-    List<LikeResponse> getAllByPost(Long postId);
-    List<LikeResponse> getAllByUser(Long userId);
-    boolean isLiked(Long userId, Long postId);
+    List<LikeResponse> getAllByPost(Integer postId);
+    List<LikeResponse> getAllByUser(Integer userId);
+    boolean isLiked(Integer userId, Integer postId);
     LikeResponse add(LikeRequest likeRequest);
     void delete(LikeRequest likeRequest);
 }

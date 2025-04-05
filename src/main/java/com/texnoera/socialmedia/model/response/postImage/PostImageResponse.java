@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PostImageResponse {
 
-    private Long id;
+    private Integer id;
     private String name;
     private String type;
     private byte[] data;
-    private Long postId;
+    private Integer postId;
 }

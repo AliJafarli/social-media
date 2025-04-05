@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CommentGetResponse {
 
-    private Long id;
-    private Long userId;
-    private Long postId;
+    private Integer id;
+    private Integer userId;
+    private Integer postId;
     private String username;
     private String commentText;
 }

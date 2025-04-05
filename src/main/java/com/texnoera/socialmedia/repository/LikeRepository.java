@@ -9,10 +9,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface LikeRepository extends JpaRepository<Like, Long> {
+public interface LikeRepository extends JpaRepository<Like, Integer> {
 
-    List<Like> findAllByUser_Id(Long userId);
-    List<Like> findAllByPost_Id(Long postId);
-    void deleteLikeById(Long id);
-    Optional<Like> findByUser_IdAndPost_Id(Long userId, Long postId);
+    List<Like> findAllByUser_Id(Integer userId);
+    List<Like> findAllByPost_Id(Integer postId);
+    void deleteLikeById(Integer id);
+    Optional<Like> findByUser_IdAndPost_Id(Integer userId, Integer postId);
 }

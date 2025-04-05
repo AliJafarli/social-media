@@ -24,7 +24,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/get-all-posts")
+    @GetMapping("/posts/all")
     public ResponseEntity<List<PostGetResponse>> getAllPosts() {
         log.info("Received request to get all posts");
         List<PostGetResponse> posts = postService.getAll();
@@ -34,7 +34,7 @@ public class PostController {
 
 
     @GetMapping("/{id}")
-    public ResponseEntity<PostGetResponse> getPostById(@PathVariable Long id) {
+    public ResponseEntity<PostGetResponse> getPostById(@PathVariable Integer id) {
         log.info("Received request to get post with ID: {}", id);
         PostGetResponse post = postService.getResponseById(id);
         log.info("Successfully retrieved post with ID: {}", id);
@@ -42,7 +42,7 @@ public class PostController {
     }
 
     @GetMapping("/get-all-by-user/{userId}")
-    public ResponseEntity<List<PostGetResponse>> getAllPostsByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<PostGetResponse>> getAllPostsByUserId(@PathVariable Integer userId) {
         log.info("Received request to get posts for user with ID: {}", userId);
         List<PostGetResponse> posts = postService.getAllByUser(userId);
         log.info("Retrieved {} posts for user ID: {}", posts.size(), userId);
@@ -50,7 +50,7 @@ public class PostController {
     }
 
     @GetMapping("/get-by-user-following/{userId}")
-    public ResponseEntity<List<PostGetResponse>> getPostsByUserFollowing(@PathVariable Long userId) {
+    public ResponseEntity<List<PostGetResponse>> getPostsByUserFollowing(@PathVariable Integer userId) {
         log.info("Received request to get posts for user following user with ID: {}", userId);
         List<PostGetResponse> posts = postService.getByUserFollowing(userId);
         log.info("Retrieved {} posts for user following user ID: {}", posts.size(), userId);
@@ -66,7 +66,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePost(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePost(@PathVariable Integer id) {
         log.info("Received request to delete post with ID: {}", id);
         postService.delete(id);
         log.info("Successfully deleted post with ID: {}", id);

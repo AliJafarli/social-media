@@ -10,10 +10,10 @@ import java.util.List;
 public interface PostService {
 
     List<PostGetResponse> getAll();
-    PostGetResponse getResponseById(Long id);
-    Post getById(Long id);
-    List<PostGetResponse> getAllByUser(Long userId);
-    List<PostGetResponse> getByUserFollowing(Long userId);
+    PostGetResponse getResponseById(Integer id);
+    Post getById(Integer id);
+    List<PostGetResponse> getAllByUser(Integer userId);
+    List<PostGetResponse> getByUserFollowing(Integer userId);
     IamResponse<PostGetResponse> add(PostAddRequest postAddRequest, String username);
-    void delete(Long id);
+    void delete(Integer id);
 }

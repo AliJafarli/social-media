@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface PostImageRepository extends JpaRepository<PostImage, Long> {
+public interface PostImageRepository extends JpaRepository<PostImage, Integer> {
 
-    Optional<PostImage> findPostImageByPost_Id(Long postId);
+    Optional<PostImage> findPostImageByPost_Id(Integer postId);
 }

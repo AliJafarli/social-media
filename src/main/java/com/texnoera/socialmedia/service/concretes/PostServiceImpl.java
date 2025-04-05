@@ -38,14 +38,14 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public PostGetResponse getResponseById(Long id) {
+    public PostGetResponse getResponseById(Integer id) {
         Post post = postRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("post not found"));
         return postMapper.postToGetResponse(post);
     }
 
     @Override
-    public Post getById(Long id) {
+    public Post getById(Integer id) {
         Post post = postRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getMessage()));
 
@@ -53,13 +53,13 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostGetResponse> getAllByUser(Long userId) {
+    public List<PostGetResponse> getAllByUser(Integer userId) {
         List<Post> userPosts = postRepository.findAllByUser_IdOrderByIdDesc(userId);
         return postMapper.postsToGetResponses(userPosts);
     }
 
     @Override
-    public List<PostGetResponse> getByUserFollowing(Long userId) {
+    public List<PostGetResponse> getByUserFollowing(Integer userId) {
         List<UserFollowingResponse> follows = userService.getUserFollowing(userId);
         List<Post> posts = new ArrayList<>();
         for (UserFollowingResponse user : follows) {
@@ -83,10 +83,10 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
         Post post = postRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getMessage()));
-        accessValidator.validateAdminOrOwnerAccess(post.getUser().getUsername(), post.getCreatedBy());
+        accessValidator.validateAdminOrOwnerAccess(post.getUser().getId());
         postRepository.deleteById(id);
     }
 }

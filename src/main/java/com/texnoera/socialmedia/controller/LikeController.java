@@ -32,7 +32,7 @@ public class LikeController {
     }
 
     @GetMapping("get-all-by-post/{postId}")
-    public ResponseEntity<List<LikeResponse>> getAllByPostId(@PathVariable Long postId) {
+    public ResponseEntity<List<LikeResponse>> getAllByPostId(@PathVariable Integer postId) {
         log.info("Received request to get all likes for post {}", postId);
         List<LikeResponse> likes = likeService.getAllByPost(postId);
         log.info("Returning {} likes for post {}", likes.size(), postId);
@@ -40,7 +40,7 @@ public class LikeController {
     }
 
     @GetMapping("get-all-by-user/{userId}")
-    public ResponseEntity<List<LikeResponse>> getAllByUserId(@PathVariable Long userId) {
+    public ResponseEntity<List<LikeResponse>> getAllByUserId(@PathVariable Integer userId) {
         log.info("Received request to get all likes for user {}", userId);
         List<LikeResponse> likes = likeService.getAllByUser(userId);
         log.info("Returning {} likes for user {}", likes.size(), userId);
@@ -48,7 +48,7 @@ public class LikeController {
     }
 
     @GetMapping("/is-liked")
-    public ResponseEntity<Boolean> isLiked(@RequestParam Long userId, @RequestParam Long postId) {
+    public ResponseEntity<Boolean> isLiked(@RequestParam Integer userId, @RequestParam Integer postId) {
         log.info("Received request to check if user {} has liked post {}", userId, postId);
         boolean isLiked = likeService.isLiked(userId, postId);
         log.info("User {} has {}liked post {}", userId, isLiked ? "" : "not ", postId);

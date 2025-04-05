@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserImageResponse {
 
-    private Long id;
+    private Integer id;
     private String name;
     private String type;
     private byte[] data;
-    private Long userId;
+    private Integer userId;
 
 }

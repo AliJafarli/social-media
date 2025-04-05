@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserFollowerResponse {
 
-    private Long userId;
+    private Integer userId;
     private String username;
 }

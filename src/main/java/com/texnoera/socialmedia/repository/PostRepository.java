@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    List<Post> findAllByUser_IdOrderByIdDesc(Long userId);
-    void deleteById(Long id);
+    List<Post> findAllByUser_IdOrderByIdDesc(Integer userId);
+    void deleteById(Integer id);
 }

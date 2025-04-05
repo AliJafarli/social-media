@@ -24,7 +24,7 @@ public class UserImageController {
     private final UserImageService userImageService;
 
     @PostMapping("/upload")
-    public ResponseEntity<UserImageResponse> upload(@RequestParam("image") MultipartFile file, @RequestParam Long userId) throws IOException {
+    public ResponseEntity<UserImageResponse> upload(@RequestParam("image") MultipartFile file, @RequestParam Integer userId) throws IOException {
         log.info("Received request to upload image for userId={}", userId);
         log.info("Uploading file: {} for userId={} with size={} bytes",
                 file.getOriginalFilename(), userId, file.getSize());
@@ -34,7 +34,7 @@ public class UserImageController {
     }
 
     @GetMapping("/download/{userId}")
-    public ResponseEntity<byte[]> download(@PathVariable Long userId) {
+    public ResponseEntity<byte[]> download(@PathVariable Integer userId) {
         log.info("Received request to download image for userId={}", userId);
         byte[] image = userImageService.download(userId);
         log.info("Image retrieval status for userId={} - {}", userId, (image != null ? "Found" : "Not Found"));

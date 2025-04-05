@@ -24,7 +24,7 @@ public class UserImageServiceImpl implements UserImageService {
     private final UserService userService;
 
     @Override
-    public UserImageResponse upload(MultipartFile file, Long userId) throws IOException {
+    public UserImageResponse upload(MultipartFile file, Integer userId) throws IOException {
         UserImage userImage = new UserImage();
         userImage.setData(ImageUtil.compressImage(file.getBytes()));
         userImage.setName(file.getOriginalFilename());
@@ -35,7 +35,7 @@ public class UserImageServiceImpl implements UserImageService {
     }
 
     @Override
-    public byte[] download(Long id) {
+    public byte[] download(Integer id) {
         Optional<UserImage> userImage = userImageRepository.findByUser_Id(id);
         if (userImage.isPresent()) {
             return ImageUtil.decompressImage(userImage.get().getData());

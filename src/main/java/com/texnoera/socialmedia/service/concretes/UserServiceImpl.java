@@ -1,5 +1,6 @@
 package com.texnoera.socialmedia.service.concretes;
 
+import com.texnoera.socialmedia.exception.DataExistException;
 import com.texnoera.socialmedia.exception.NotFoundException;
 import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.mapper.UserMapper;
@@ -14,6 +15,7 @@ import com.texnoera.socialmedia.repository.FollowRepository;
 import com.texnoera.socialmedia.repository.RoleRepository;
 import com.texnoera.socialmedia.repository.UserRepository;
 import com.texnoera.socialmedia.security.enums.SocialMediaUserRole;
+import com.texnoera.socialmedia.security.validation.AccessValidator;
 import com.texnoera.socialmedia.service.abstracts.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,6 +40,7 @@ public class UserServiceImpl implements UserService {
     private final FollowRepository followRepository;
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
+    private final AccessValidator accessValidator;
 
     @Override
     public List<UserResponse> getAll() {
@@ -46,7 +49,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse getResponseById(Long id) {
+    public UserResponse getResponseById(Integer id) {
         User user = userRepository.findById(id).orElse(null);
         return userMapper.userToResponse(user);
     }
@@ -58,24 +61,25 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<UserFollowingResponse> getUserFollowing(Long userId) {
+    public List<UserFollowingResponse> getUserFollowing(Integer userId) {
         return userMapper.followsToFollowingResponses(followRepository.findAllByUser_Id(userId));
     }
 
     @Override
-    public boolean isFollowing(Long userId, Long followingId) {
+    public boolean isFollowing(Integer userId, Integer followingId) {
         Optional<Follow> follow = followRepository.findByUser_IdAndFollowing_Id(userId, followingId);
         return follow.isPresent();
     }
 
     @Override
-    public User getById(Long id) {
+    public User getById(Integer id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new RuntimeException("user not found"));
     }
 
     @Override
     public UserResponse add(UserAddRequest userAddRequest) {
+
 
         Role userRole = roleRepository.findByName(SocialMediaUserRole.USER.getRole())
                 .orElseThrow(() -> new NotFoundException(ExceptionConstants.NOT_FOUND_EXCEPTION.getUserMessage()));
@@ -91,26 +95,37 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserResponse update(Long id, UserUpdateRequest userUpdateRequest) {
+    public UserResponse update(Integer id, UserUpdateRequest request) {
         User user = userRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("user not found"));
-        userMapper.update(user, userUpdateRequest);
+                new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_ID.getMessage(id)));
+
+        accessValidator.validateAdminOrOwnerAccess(id);
+
+        if (!user.getUsername().equals(request.getUsername()) && userRepository.existsByUsername(request.getUsername())) {
+            throw new DataExistException(ExceptionConstants.USERNAME_ALREADY_EXISTS.getMessage(request.getUsername()));
+        }
+
+        if (!user.getEmail().equals(request.getEmail()) && userRepository.existsByEmail(request.getEmail())) {
+            throw new DataExistException(ExceptionConstants.EMAIL_ALREADY_EXISTS.getMessage(request.getEmail()));
+        }
+        userMapper.update(user, request);
         return userMapper.userToResponse(userRepository.save(user));
 
     }
 
     @Override
-    public void delete(Long id) {
+    public void delete(Integer id) {
+        accessValidator.validateAdminOrOwnerAccess(id);
         userRepository.deleteById(id);
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-return getUserDetails(email, userRepository);
+        return getUserDetails(email, userRepository);
     }
 
     static UserDetails getUserDetails(String email, UserRepository userRepository) {
-        User user = userRepository.findUserByEmail(email).orElseThrow(()-> new NotFoundException(ExceptionConstants.NOT_FOUND_EXCEPTION.getUserMessage()));
+        User user = userRepository.findUserByEmail(email).orElseThrow(() -> new NotFoundException(ExceptionConstants.NOT_FOUND_EXCEPTION.getUserMessage()));
         user.setLastLogin(LocalDateTime.now());
         userRepository.save(user);
         return new org.springframework.security.core.userdetails.User(

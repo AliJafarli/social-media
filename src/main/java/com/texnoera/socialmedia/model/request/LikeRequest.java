@@ -9,6 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class LikeRequest {
 
-    private Long postId;
-    private Long userId;
+    private Integer postId;
+    private Integer userId;
 }
