@@ -49,7 +49,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(NOT_SECURED_URLS).permitAll()
 
                         .requestMatchers(post("/users/all")).hasAnyAuthority(adminAccessSecurityRoles())
