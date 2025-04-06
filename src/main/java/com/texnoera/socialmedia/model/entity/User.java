@@ -75,10 +75,10 @@ public class User {
     private Collection<Role> roles;
 
     @CreationTimestamp
-    private LocalDateTime createdAt;
+    private LocalDateTime created;
 
     @UpdateTimestamp
-    private LocalDateTime updatedAt;
+    private LocalDateTime updated;
 
     @Column(name = "last_login")
     private LocalDateTime lastLogin;
