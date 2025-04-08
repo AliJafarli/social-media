@@ -25,4 +25,10 @@ public class RegistrationUserRequest {
 
     @NotEmpty
     private String confirmPassword;
+
+    @NotBlank
+    private String firstName;
+
+    @NotBlank
+    private String lastName;
 }
