@@ -24,14 +24,14 @@ public class ApiUtils {
         }
     }
 
-    public static Cookie createAuthCookie(String value) {
-        Cookie authorizationCookie = new Cookie(HttpHeaders.AUTHORIZATION, value);
-        authorizationCookie.setHttpOnly(true);
-        authorizationCookie.setSecure(true);
-        authorizationCookie.setPath("/");
-        authorizationCookie.setMaxAge(300);
-        return authorizationCookie;
-    }
+//    public static Cookie createAuthCookie(String value) {
+//        Cookie authorizationCookie = new Cookie(HttpHeaders.AUTHORIZATION, value);
+//        authorizationCookie.setHttpOnly(true);
+//        authorizationCookie.setSecure(true);
+//        authorizationCookie.setPath("/");
+//        authorizationCookie.setMaxAge(300);
+//        return authorizationCookie;
+//    }
 
     public static String generateUuidWithoutDash(){
         return UUID.randomUUID().toString().replace(ApiConstants.DASH, "");
