@@ -8,7 +8,6 @@ import com.texnoera.socialmedia.service.model.IamServiceUserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -38,9 +37,9 @@ public class SecurityConfig {
     private static final String POST = "POST";
 
     private static final AntPathRequestMatcher[] NOT_SECURED_URLS = new AntPathRequestMatcher[]{
-            new AntPathRequestMatcher("/auth-login", POST),
-            new AntPathRequestMatcher("/auth-register", POST),
-            new AntPathRequestMatcher("/auth-refresh-token", GET),
+            new AntPathRequestMatcher("/api/v1/auth-login", POST),
+            new AntPathRequestMatcher("/api/v1/auth-register", POST),
+            new AntPathRequestMatcher("/api/v1/auth-refresh-token", GET),
 
     };
 
@@ -52,8 +51,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(NOT_SECURED_URLS).permitAll()
 
-                        .requestMatchers(post("/users-all")).hasAnyAuthority(adminAccessSecurityRoles())
-                        .requestMatchers(post("/create-user")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(post("/api/v1/users/users-all")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(post("/api/v1/users/create-user")).hasAnyAuthority(adminAccessSecurityRoles())
 
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions ->exceptions
