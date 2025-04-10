@@ -23,7 +23,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/users/all")
+    @GetMapping("/users-all")
     public ResponseEntity<List<UserResponse>> getAllUsers() {
         log.info("Received request to get all users");
         List<UserResponse> users = userService.getAll();

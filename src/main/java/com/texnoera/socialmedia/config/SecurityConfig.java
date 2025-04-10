@@ -38,9 +38,9 @@ public class SecurityConfig {
     private static final String POST = "POST";
 
     private static final AntPathRequestMatcher[] NOT_SECURED_URLS = new AntPathRequestMatcher[]{
-            new AntPathRequestMatcher("/auth/login", POST),
-            new AntPathRequestMatcher("/auth/register", POST),
-            new AntPathRequestMatcher("/auth/refresh/token", GET),
+            new AntPathRequestMatcher("/auth-login", POST),
+            new AntPathRequestMatcher("/auth-register", POST),
+            new AntPathRequestMatcher("/auth-refresh-token", GET),
 
     };
 
@@ -52,7 +52,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/v1/auth/**").permitAll()
                         .requestMatchers(NOT_SECURED_URLS).permitAll()
 
-                        .requestMatchers(post("/users/all")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(post("/users-all")).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(post("/create-user")).hasAnyAuthority(adminAccessSecurityRoles())
 
                         .anyRequest().authenticated())
                 .exceptionHandling(exceptions ->exceptions
