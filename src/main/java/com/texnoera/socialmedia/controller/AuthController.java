@@ -39,7 +39,7 @@ public class AuthController {
 
     }
 
-    @GetMapping("/refresh/token")
+    @GetMapping("/refresh-token")
     public ResponseEntity<IamResponse<UserProfileResponse>> refreshToken(
             @RequestParam(name = "token") String refreshToken,
             HttpServletResponse response) {
