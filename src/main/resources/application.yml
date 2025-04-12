@@ -18,5 +18,5 @@ spring:
 
 jwt:
   secret: BoYdZCyOK7aeIssLz1YSh6mDZxb5xMY1vtA6Dg1gnw+T0bx67sQNV4n6T30ZGoO3mFIDnvhraK0jyIOjEXOdlw==
-  lifetime: 3600000
-  expiration: 103600000
+  #lifetime: 3600000
+  #expiration: 103600000
