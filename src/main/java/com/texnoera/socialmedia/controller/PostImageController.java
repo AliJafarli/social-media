@@ -5,12 +5,14 @@ import com.texnoera.socialmedia.model.response.postImage.PostImageResponse;
 import com.texnoera.socialmedia.service.abstracts.PostImageService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 
 import java.io.IOException;
 
@@ -42,5 +44,18 @@ public class PostImageController {
                 ResponseEntity.status(HttpStatus.OK).contentType(MediaType.IMAGE_PNG).body(image) :
                 ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
+
+    @GetMapping("/view/{id}")
+    public ResponseEntity<byte[]> viewImage(@PathVariable Integer id) {
+        byte[] imageData = postImageService.getImageDataById(id);
+        String contentType = postImageService.getContentTypeById(id);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.valueOf(contentType));
+
+        return new ResponseEntity<>(imageData, headers, HttpStatus.OK);
+    }
+
+
 
 }

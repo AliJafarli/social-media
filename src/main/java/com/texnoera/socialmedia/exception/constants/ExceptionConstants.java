@@ -24,6 +24,7 @@ public enum ExceptionConstants {
     INVALID_GROUP_ID("Invalid group id", BAD_REQUEST),
     SELECTED_LIMIT_EXCEPTION("Category limit exceed", BAD_REQUEST),
 
+    POST_IMAGE_NOT_FOUND("Post image with ID: %s was not found", NOT_FOUND),
     POST_NOT_FOUND_BY_ID("Post with ID: %s was not found", NOT_FOUND),
     POST_ALREADY_EXISTS("Post with Title: %s already exists", CONFLICT),
     USER_NOT_FOUND_BY_ID("User with ID: %s was not found", NOT_FOUND),
