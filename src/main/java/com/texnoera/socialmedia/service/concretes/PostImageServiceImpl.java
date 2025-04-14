@@ -10,10 +10,8 @@ import com.texnoera.socialmedia.service.abstracts.PostImageService;
 import com.texnoera.socialmedia.service.abstracts.PostService;
 import com.texnoera.socialmedia.utils.ImageUtil;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -57,14 +55,14 @@ public class PostImageServiceImpl implements PostImageService {
     @Override
     public byte[] getImageDataById(Integer id) {
         PostImage postImage = postImageRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ExceptionConstants.POST_IMAGE_NOT_FOUND.getMessage()));
         return ImageUtil.decompressImage(postImage.getData());
     }
 
     @Override
     public String getContentTypeById(Integer id) {
         PostImage postImage = postImageRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> new NotFoundException(ExceptionConstants.POST_IMAGE_NOT_FOUND.getMessage()));
         return postImage.getType();
     }
 
