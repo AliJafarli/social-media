@@ -32,17 +32,8 @@ public class PostImageServiceImpl implements PostImageService {
         postImage.setData(ImageUtil.compressImage(file.getBytes()));
         postImage.setPost(postService.getById(postId));
         postImageRepository.save(postImage);
-        postImageMapper.postImageToResponse(postImage);
 
-        String imageUrl = "/api/v1/post-images/view/" + postImage.getId();
-
-        return new PostImageResponse(
-                postImage.getId(),
-                postImage.getName(),
-                postImage.getType(),
-                imageUrl,
-                postId
-        );
+        return postImageMapper.postImageToResponse(postImage);
     }
 
     @Override
