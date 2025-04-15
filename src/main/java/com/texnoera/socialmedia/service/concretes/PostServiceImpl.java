@@ -6,6 +6,7 @@ import com.texnoera.socialmedia.mapper.PostMapper;
 import com.texnoera.socialmedia.model.entity.Post;
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.PostAddRequest;
+import com.texnoera.socialmedia.model.response.page.PageResponse;
 import com.texnoera.socialmedia.model.response.post.PostGetResponse;
 import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
@@ -15,6 +16,8 @@ import com.texnoera.socialmedia.security.validation.AccessValidator;
 import com.texnoera.socialmedia.service.abstracts.PostService;
 import com.texnoera.socialmedia.service.abstracts.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -31,10 +34,19 @@ public class PostServiceImpl implements PostService {
     private final UserRepository userRepository;
     private final AccessValidator accessValidator;
 
-    @Override
-    public List<PostGetResponse> getAll() {
-        List<Post> posts = postRepository.findAll();
-        return postMapper.postsToGetResponses(posts);
+    public PageResponse<PostGetResponse> getAll(Pageable pageable) {
+        Page<Post> postPage = postRepository.findAll(pageable);
+
+        List<PostGetResponse> dtoList = postMapper.postsToGetResponses(postPage.getContent());
+
+        return new PageResponse<>(
+                dtoList,
+                postPage.getNumber(),
+                postPage.getSize(),
+                postPage.getTotalElements(),
+                postPage.getTotalPages(),
+                postPage.isLast()
+        );
     }
 
     @Override

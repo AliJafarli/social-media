@@ -1,12 +1,18 @@
 package com.texnoera.socialmedia.controller;
 
+import com.texnoera.socialmedia.model.entity.Post;
 import com.texnoera.socialmedia.model.request.PostAddRequest;
+import com.texnoera.socialmedia.model.response.page.PageResponse;
 import com.texnoera.socialmedia.model.response.post.PostGetResponse;
 import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 import com.texnoera.socialmedia.service.abstracts.PostService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,12 +31,26 @@ public class PostController {
     private final PostService postService;
 
     @GetMapping("/posts/all")
-    public ResponseEntity<List<PostGetResponse>> getAllPosts() {
-        log.info("Received request to get all posts");
-        List<PostGetResponse> posts = postService.getAll();
-        log.info("Retrieved {} posts", posts.size());
-        return new ResponseEntity<>(posts, HttpStatus.OK);
+    public ResponseEntity<PageResponse<PostGetResponse>> getPosts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "created") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        log.info("GET /posts/all called with page={}, size={}, sortBy={}, direction={}", page, size, sortBy, direction);
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable = PageRequest.of(page, size, sort);
+        PageResponse<PostGetResponse> response = postService.getAll(pageable);
+
+        log.info("Returning {} posts, page {}/{}", response.getContent().size(), response.getPage(), response.getTotalPages());
+
+        return ResponseEntity.ok(response);
     }
+
 
 
     @GetMapping("/{id}")
@@ -72,4 +92,6 @@ public class PostController {
         log.info("Successfully deleted post with ID: {}", id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+
 }

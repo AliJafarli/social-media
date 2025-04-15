@@ -12,7 +12,7 @@ import java.util.List;
 public interface PostMapper {
 
 
-
+    @Mapping(target = "likesCount", expression = "java(post.getLikes() != null ? post.getLikes().size() : 0)")
     PostGetResponse postToGetResponse(Post post);
 
     @Mapping(source = "userId", target = "user.id")
