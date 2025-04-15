@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 public interface PostImageMapper {
 
     @Mapping(source = "post.id",target = "postId")
+    @Mapping(target = "imageUrl", expression = "java(com.texnoera.socialmedia.utils.ImageUtil.buildImageUrl(postImage.getId()))")
     PostImageResponse postImageToResponse(PostImage postImage);
-
 
 }
