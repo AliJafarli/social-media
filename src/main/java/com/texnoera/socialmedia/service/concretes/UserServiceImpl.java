@@ -9,6 +9,7 @@ import com.texnoera.socialmedia.model.entity.Role;
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.request.UserUpdateRequest;
+import com.texnoera.socialmedia.model.response.page.PageResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.repository.FollowRepository;
@@ -18,6 +19,8 @@ import com.texnoera.socialmedia.security.enums.SocialMediaUserRole;
 import com.texnoera.socialmedia.security.validation.AccessValidator;
 import com.texnoera.socialmedia.service.abstracts.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -42,10 +45,18 @@ public class UserServiceImpl implements UserService {
     private final RoleRepository roleRepository;
     private final AccessValidator accessValidator;
 
-    @Override
-    public List<UserResponse> getAll() {
+    public PageResponse<UserResponse> getAll(Pageable pageable) {
+        Page<User> userPage = userRepository.findAll(pageable);
+        List<UserResponse> userResponses = userMapper.usersToResponses(userPage.getContent());
 
-        return userMapper.usersToResponses(userRepository.findAll());
+        return new PageResponse<>(
+                userResponses,
+                userPage.getNumber(),
+                userPage.getSize(),
+                userPage.getTotalElements(),
+                userPage.getTotalPages(),
+                userPage.isLast()
+        );
     }
 
     @Override
