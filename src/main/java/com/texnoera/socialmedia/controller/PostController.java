@@ -30,7 +30,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/posts/all")
+    @GetMapping("/all")
     public ResponseEntity<PageResponse<PostGetResponse>> getPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
