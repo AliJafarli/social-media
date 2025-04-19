@@ -3,16 +3,19 @@ package com.texnoera.socialmedia.controller;
 
 import com.texnoera.socialmedia.model.request.CommentAddRequest;
 import com.texnoera.socialmedia.model.response.comment.CommentGetResponse;
+import com.texnoera.socialmedia.model.response.page.PageResponse;
 import com.texnoera.socialmedia.service.abstracts.CommentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @Log4j2
 @Validated
@@ -24,27 +27,65 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/get-all")
-    public ResponseEntity<List<CommentGetResponse>> getAllComments() {
-        log.info("Received request to get all comments");
-        List<CommentGetResponse> comments = commentService.getAll();
-        log.info("Retrieved {} comments", comments.size());
-        return new ResponseEntity<>(comments, HttpStatus.OK);
+    public ResponseEntity<PageResponse<CommentGetResponse>> getAllComments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        log.info("GET /comments/get-all called with page={}, size={}, sortBy={}, direction={}", page, size, sortBy, direction);
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        PageResponse<CommentGetResponse> comments = commentService.getAll(pageable);
+        log.info("Returning {} comments, page {}/{}", comments.getContent().size(), comments.getPage(), comments.getTotalPages());
+
+        return ResponseEntity.ok(comments);
     }
 
     @GetMapping("/get-all-by-post/{postId}")
-    public ResponseEntity<List<CommentGetResponse>> getAllCommentsByPostId(@PathVariable Integer postId) {
-        log.info("Received request to get all comments by post ID {}", postId);
-        List<CommentGetResponse> comments = commentService.getAllByPost(postId);
-        log.info("Retrieved {} comments for post ID: {}", comments.size(), postId);
-        return new ResponseEntity<>(comments, HttpStatus.OK);
+    public ResponseEntity<PageResponse<CommentGetResponse>> getAllCommentsByPostId(
+            @PathVariable Integer postId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        log.info("GET /comments/get-all-by-post/{} called with page={}, size={}, sortBy={}, direction={}", postId, page, size, sortBy, direction);
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        PageResponse<CommentGetResponse> comments = commentService.getAllByPost(postId, pageable);
+        log.info("Returning {} comments for post ID {}, page {}/{}", comments.getContent().size(), postId, comments.getPage(), comments.getTotalPages());
+
+        return ResponseEntity.ok(comments);
     }
 
     @GetMapping("/get-all-by-user/{userId}")
-    public ResponseEntity<List<CommentGetResponse>> getAllCommentsByUserId(@PathVariable Integer userId) {
-        log.info("Received request to get comments for user ID: {}", userId);
-        List<CommentGetResponse> comments = commentService.getAllByUser(userId);
-        log.info("Retrieved {} comments for user ID: {}", comments.size(), userId);
-        return new ResponseEntity<>(comments, HttpStatus.OK);
+    public ResponseEntity<PageResponse<CommentGetResponse>> getAllCommentsByUserId(
+            @PathVariable Integer userId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
+            @RequestParam(defaultValue = "desc") String direction
+    ) {
+        log.info("GET /comments/get-all-by-user/{} called with page={}, size={}, sortBy={}, direction={}", userId, page, size, sortBy, direction);
+
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+        Pageable pageable = PageRequest.of(page, size, sort);
+
+        PageResponse<CommentGetResponse> comments = commentService.getAllByUser(userId, pageable);
+        log.info("Returning {} comments for user ID {}, page {}/{}", comments.getContent().size(), userId, comments.getPage(), comments.getTotalPages());
+
+        return ResponseEntity.ok(comments);
     }
 
     @PostMapping("/add")
