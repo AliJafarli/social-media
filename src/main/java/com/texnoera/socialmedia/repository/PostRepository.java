@@ -11,7 +11,10 @@ import java.util.List;
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
 
-    List<Post> findAllByUser_IdOrderByIdDesc(Integer userId);
+    Page<Post> findAllByUser_Id(Integer userId, Pageable pageable);
+    Page<Post> findAllByUser_IdIn(List<Integer> userIds, Pageable pageable);
+
     void deleteById(Integer id);
     Page<Post> findAll(Pageable pageable);
+
 }
