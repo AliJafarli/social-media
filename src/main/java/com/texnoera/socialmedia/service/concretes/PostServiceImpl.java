@@ -20,9 +20,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -58,28 +58,56 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public Post getById(Integer id) {
-        Post post = postRepository.findById(id).orElseThrow(() ->
+        return postRepository.findById(id).orElseThrow(() ->
                 new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getMessage()));
-
-        return post;
     }
 
     @Override
-    public List<PostGetResponse> getAllByUser(Integer userId) {
-        List<Post> userPosts = postRepository.findAllByUser_IdOrderByIdDesc(userId);
-        return postMapper.postsToGetResponses(userPosts);
+    public PageResponse<PostGetResponse> getAllByUser(Integer userId, Pageable pageable) {
+        Page<Post> userPostsPage = postRepository.findAllByUser_Id(userId, pageable);
+
+        List<PostGetResponse> content = userPostsPage.getContent().stream()
+                .map(postMapper::postToGetResponse)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(
+                content,
+                userPostsPage.getNumber(),
+                userPostsPage.getSize(),
+                userPostsPage.getTotalElements(),
+                userPostsPage.getTotalPages(),
+                userPostsPage.isLast()
+        );
     }
 
+
     @Override
-    public List<PostGetResponse> getByUserFollowing(Integer userId) {
+    public PageResponse<PostGetResponse> getByUserFollowing(Integer userId, Pageable pageable) {
         List<UserFollowingResponse> follows = userService.getUserFollowing(userId);
-        List<Post> posts = new ArrayList<>();
-        for (UserFollowingResponse user : follows) {
-            posts.addAll(postRepository.findAllByUser_IdOrderByIdDesc(user.getUserId()));
+        List<Integer> followedUserIds = follows.stream()
+                .map(UserFollowingResponse::getUserId)
+                .collect(Collectors.toList());
+
+        if (followedUserIds.isEmpty()) {
+            return new PageResponse<>(Collections.emptyList(), pageable.getPageNumber(), pageable.getPageSize(), 0, 0, true);
         }
-        posts.sort(Comparator.comparing(Post::getId).reversed());
-        return postMapper.postsToGetResponses(posts);
+
+        Page<Post> postsPage = postRepository.findAllByUser_IdIn(followedUserIds, pageable);
+
+        List<PostGetResponse> content = postsPage.getContent().stream()
+                .map(postMapper::postToGetResponse)
+                .collect(Collectors.toList());
+
+        return new PageResponse<>(
+                content,
+                postsPage.getNumber(),
+                postsPage.getSize(),
+                postsPage.getTotalElements(),
+                postsPage.getTotalPages(),
+                postsPage.isLast()
+        );
     }
+
 
     @Override
     public IamResponse<PostGetResponse> add(PostAddRequest postAddRequest, String username) {

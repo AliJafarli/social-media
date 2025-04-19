@@ -5,10 +5,8 @@ import com.texnoera.socialmedia.model.request.PostAddRequest;
 import com.texnoera.socialmedia.model.response.page.PageResponse;
 import com.texnoera.socialmedia.model.response.post.PostGetResponse;
 import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface PostService {
 
@@ -16,8 +14,8 @@ public interface PostService {
 
     PostGetResponse getResponseById(Integer id);
     Post getById(Integer id);
-    List<PostGetResponse> getAllByUser(Integer userId);
-    List<PostGetResponse> getByUserFollowing(Integer userId);
+    PageResponse<PostGetResponse> getAllByUser(Integer userId, Pageable pageable);
+    PageResponse<PostGetResponse> getByUserFollowing(Integer userId, Pageable pageable);
     IamResponse<PostGetResponse> add(PostAddRequest postAddRequest, String username);
     void delete(Integer id);
 }
