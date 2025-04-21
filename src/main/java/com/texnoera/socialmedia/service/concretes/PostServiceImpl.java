@@ -37,10 +37,10 @@ public class PostServiceImpl implements PostService {
     public PageResponse<PostGetResponse> getAll(Pageable pageable) {
         Page<Post> postPage = postRepository.findAll(pageable);
 
-        List<PostGetResponse> dtoList = postMapper.postsToGetResponses(postPage.getContent());
+        List<PostGetResponse> responseList = postMapper.postsToGetResponses(postPage.getContent());
 
         return new PageResponse<>(
-                dtoList,
+                responseList,
                 postPage.getNumber(),
                 postPage.getSize(),
                 postPage.getTotalElements(),
