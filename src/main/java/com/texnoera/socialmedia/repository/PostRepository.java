@@ -3,6 +3,7 @@ package com.texnoera.socialmedia.repository;
 import com.texnoera.socialmedia.model.entity.Post;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +16,8 @@ public interface PostRepository extends JpaRepository<Post, Integer> {
     Page<Post> findAllByUser_IdIn(List<Integer> userIds, Pageable pageable);
 
     void deleteById(Integer id);
+
+    @EntityGraph(attributePaths = {"likes", "user"})
     Page<Post> findAll(Pageable pageable);
 
 }
