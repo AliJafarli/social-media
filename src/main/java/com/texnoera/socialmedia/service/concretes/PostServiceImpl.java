@@ -52,7 +52,7 @@ public class PostServiceImpl implements PostService {
     @Override
     public PostGetResponse getResponseById(Integer id) {
         Post post = postRepository.findById(id).orElseThrow(() ->
-                new RuntimeException("post not found"));
+                new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getMessage()));
         return postMapper.postToGetResponse(post);
     }
 

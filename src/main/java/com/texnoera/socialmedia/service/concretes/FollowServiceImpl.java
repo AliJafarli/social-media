@@ -1,5 +1,7 @@
 package com.texnoera.socialmedia.service.concretes;
 
+import com.texnoera.socialmedia.exception.AlreadyFollowingException;
+import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.mapper.FollowMapper;
 import com.texnoera.socialmedia.model.entity.Follow;
 import com.texnoera.socialmedia.model.request.FollowRequest;
@@ -22,7 +24,7 @@ public class FollowServiceImpl implements FollowService {
     public FollowResponse add(FollowRequest followAddRequest) {
 
         if (userService.isFollowing(followAddRequest.getUserId(), followAddRequest.getFollowingId())) {
-            throw new RuntimeException("Already following");
+            throw new AlreadyFollowingException(ExceptionConstants.ALREADY_FOLLOWING_EXCEPTION.getUserMessage());
         }
         Follow follow = followMapper.addRequestToFollow(followAddRequest);
         followRepository.save(follow);

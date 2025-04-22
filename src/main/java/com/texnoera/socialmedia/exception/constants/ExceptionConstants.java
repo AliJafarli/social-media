@@ -29,6 +29,7 @@ public enum ExceptionConstants {
     POST_ALREADY_EXISTS("Post with Title: %s already exists", CONFLICT),
     USER_NOT_FOUND_BY_ID("User with ID: %s was not found", NOT_FOUND),
     USERNAME_ALREADY_EXISTS("Username: %s already exists", CONFLICT),
+    ALREADY_FOLLOWING_EXCEPTION("Already following user", CONFLICT),
     USERNAME_NOT_FOUND("Username: %s was not found", NOT_FOUND),
     EMAIL_ALREADY_EXISTS("Email: %s already exists", CONFLICT),
     EMAIL_NOT_FOUND("Email: %s was not found", NOT_FOUND),
