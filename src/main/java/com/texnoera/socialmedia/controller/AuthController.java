@@ -7,7 +7,6 @@ import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.service.abstracts.AuthService;
 import com.texnoera.socialmedia.utils.ApiUtils;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -31,12 +30,8 @@ public class AuthController {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
         IamResponse<UserProfileResponse> result = authService.login(request);
-//        Cookie authorizationCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
-//        response.addCookie(authorizationCookie);
 
         return ResponseEntity.ok(result);
-
-
     }
 
     @GetMapping("/refresh-token")
@@ -46,8 +41,6 @@ public class AuthController {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
         IamResponse<UserProfileResponse> result = authService.refreshAccessToken(refreshToken);
-//        Cookie authorizationCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
-//        response.addCookie(authorizationCookie);
 
         return ResponseEntity.ok(result);
     }
@@ -59,8 +52,6 @@ public class AuthController {
         log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
         IamResponse<UserProfileResponse> result = authService.registerUser(request);
-//        Cookie authorizationCookie = ApiUtils.createAuthCookie(result.getPayload().getToken());
-//        response.addCookie(authorizationCookie);
 
         return ResponseEntity.ok(result);
     }
