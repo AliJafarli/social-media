@@ -51,9 +51,11 @@ public class PostServiceImpl implements PostService {
 
     @Override
     public PostGetResponse getResponseById(Integer id) {
-        Post post = postRepository.findById(id).orElseThrow(() ->
+        Post post = postRepository.findWithImagesById(id).orElseThrow(() ->
                 new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getMessage()));
-        return postMapper.postToGetResponse(post);
+        PostGetResponse postGetResponse = postMapper.postToGetResponse(post);
+        System.out.println(post.getPostImages());
+        return postGetResponse;
     }
 
     @Override
