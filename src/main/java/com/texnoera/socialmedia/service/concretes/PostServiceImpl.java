@@ -16,6 +16,7 @@ import com.texnoera.socialmedia.security.validation.AccessValidator;
 import com.texnoera.socialmedia.service.abstracts.PostService;
 import com.texnoera.socialmedia.service.abstracts.UserService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class PostServiceImpl implements PostService {
@@ -54,7 +56,7 @@ public class PostServiceImpl implements PostService {
         Post post = postRepository.findWithImagesById(id).orElseThrow(() ->
                 new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getMessage()));
         PostGetResponse postGetResponse = postMapper.postToGetResponse(post);
-        System.out.println(post.getPostImages());
+        log.debug("Post images: {}", post.getPostImages());
         return postGetResponse;
     }
 
