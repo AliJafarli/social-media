@@ -15,6 +15,7 @@ import java.util.Set;
 @Mapper(componentModel = "spring")
 public interface PostMapper {
 
+    @Mapping(target = "created", source = "createdAt")
     @Mapping(target = "imageUrls", expression = "java(mapImageUrls(post))")
     @Mapping(target = "likesCount", expression = "java(post.getLikes() != null ? post.getLikes().size() : 0)")
     PostGetResponse postToGetResponse(Post post);
