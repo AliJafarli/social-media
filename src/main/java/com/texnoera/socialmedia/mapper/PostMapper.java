@@ -1,16 +1,12 @@
 package com.texnoera.socialmedia.mapper;
 
 import com.texnoera.socialmedia.model.entity.Post;
-import com.texnoera.socialmedia.model.entity.PostImage;
 import com.texnoera.socialmedia.model.request.PostAddRequest;
 import com.texnoera.socialmedia.model.response.post.PostGetResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
 
 @Mapper(componentModel = "spring")
 public interface PostMapper {
@@ -20,7 +16,14 @@ public interface PostMapper {
     @Mapping(target = "likesCount", expression = "java(post.getLikes() != null ? post.getLikes().size() : 0)")
     PostGetResponse postToGetResponse(Post post);
 
+    @Mapping(target = "id", ignore = true)
     @Mapping(source = "userId", target = "user.id")
+    @Mapping(target = "comments", ignore = true)
+    @Mapping(target = "likes", ignore = true)
+    @Mapping(target = "postImages", ignore = true)
+    @Mapping(target = "deleted", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
     Post postAddRequestToPost(PostAddRequest postAddRequest);
     List<PostGetResponse> postsToGetResponses(List<Post> posts);
 
