@@ -31,7 +31,7 @@ public class PostController {
     public ResponseEntity<PageResponse<PostGetResponse>> getPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "created") String sortBy,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String direction
     ) {
         log.info("GET /posts/all called with page={}, size={}, sortBy={}, direction={}", page, size, sortBy, direction);
@@ -63,7 +63,7 @@ public class PostController {
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "created") String sortBy,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String direction
     ) {
         log.info("GET /posts/get-all-by-user/{} called with page={}, size={}, sortBy={}, direction={}", userId, page, size, sortBy, direction);
@@ -88,7 +88,7 @@ public class PostController {
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
-            @RequestParam(defaultValue = "created") String sortBy,
+            @RequestParam(defaultValue = "createdAt") String sortBy,
             @RequestParam(defaultValue = "desc") String direction
     ) {
         log.info("GET /posts/get-by-user-following/{} called with page={}, size={}, sortBy={}, direction={}", userId, page, size, sortBy, direction);
