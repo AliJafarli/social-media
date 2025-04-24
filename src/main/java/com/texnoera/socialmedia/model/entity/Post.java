@@ -34,7 +34,7 @@ public class Post {
     private Set<Like> likes;
 
 
-    @OneToMany(mappedBy = "post",fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private Set<PostImage> postImages;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
