@@ -5,10 +5,16 @@ import com.texnoera.socialmedia.model.request.PostAddRequest;
 import com.texnoera.socialmedia.model.response.post.PostGetResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
+
 import java.util.List;
 
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring",
+        nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
+)
 public interface PostMapper {
 
     @Mapping(target = "created", source = "createdAt")
@@ -30,7 +36,7 @@ public interface PostMapper {
     default List<String> mapImageUrls(Post post) {
         return post.getPostImages() == null ? List.of() :
                 post.getPostImages().stream()
-                        .map(image -> "/api/v1/post-images/view/" + image.getId())
+                        .map(image -> "http://localhost:8080/api/v1/post-images/view/" + image.getId())
                         .toList();
     }
 }
