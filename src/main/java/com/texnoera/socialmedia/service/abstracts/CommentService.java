@@ -4,10 +4,8 @@ import com.texnoera.socialmedia.model.request.CommentAddRequest;
 import com.texnoera.socialmedia.model.request.CommentUpdateRequest;
 import com.texnoera.socialmedia.model.response.comment.CommentGetResponse;
 import com.texnoera.socialmedia.model.response.page.PageResponse;
-import com.texnoera.socialmedia.model.response.post.PostGetResponse;
 import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 
 public interface CommentService {
 
@@ -18,5 +16,8 @@ public interface CommentService {
 
     CommentGetResponse getById(Integer id);
     void update(Integer id, CommentUpdateRequest commentUpdateRequest);
+
+    boolean existsById(Integer id);
+
     void delete(Integer id);
 }

@@ -23,7 +23,7 @@ public class LikeController {
 
     private final LikeService likeService;
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<LikeResponse> addLike(@Valid @RequestBody LikeRequest likeRequest) {
         log.info("Received request to add like for user {} on post {}", likeRequest.getUserId(), likeRequest.getPostId());
         LikeResponse likeResponse = likeService.add(likeRequest);
@@ -31,7 +31,7 @@ public class LikeController {
         return new ResponseEntity<>(likeResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("get-all-by-post/{postId}")
+    @GetMapping("post/{postId}")
     public ResponseEntity<List<LikeResponse>> getAllByPostId(@PathVariable Integer postId) {
         log.info("Received request to get all likes for post {}", postId);
         List<LikeResponse> likes = likeService.getAllByPost(postId);
@@ -39,7 +39,7 @@ public class LikeController {
         return new ResponseEntity<>(likes, HttpStatus.OK);
     }
 
-    @GetMapping("get-all-by-user/{userId}")
+    @GetMapping("user/{userId}")
     public ResponseEntity<List<LikeResponse>> getAllByUserId(@PathVariable Integer userId) {
         log.info("Received request to get all likes for user {}", userId);
         List<LikeResponse> likes = likeService.getAllByUser(userId);
@@ -47,19 +47,21 @@ public class LikeController {
         return new ResponseEntity<>(likes, HttpStatus.OK);
     }
 
-    @GetMapping("/is-liked")
-    public ResponseEntity<Boolean> isLiked(@RequestParam Integer userId, @RequestParam Integer postId) {
+    @GetMapping("/user/{userId}/post/{postId}")
+    public ResponseEntity<Boolean> isLiked(@PathVariable Integer userId,
+                                           @PathVariable Integer postId) {
         log.info("Received request to check if user {} has liked post {}", userId, postId);
         boolean isLiked = likeService.isLiked(userId, postId);
         log.info("User {} has {}liked post {}", userId, isLiked ? "" : "not ", postId);
         return new ResponseEntity<>(isLiked, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteLike(@RequestBody LikeRequest likeRequest) {
-        log.info("Received request to delete like for user {}", likeRequest.getUserId());
-        likeService.delete(likeRequest);
-        log.info("Successfully deleted like for user {}", likeRequest.getUserId());
+    @DeleteMapping("/user/{userId}/post/{postId}")
+    public ResponseEntity<Void> deleteLike(@PathVariable Integer userId,
+                                           @PathVariable Integer postId) {
+        log.info("Received request to delete like for user {} on post {}", userId, postId);
+        likeService.delete(new LikeRequest(userId, postId));
+        log.info("Successfully deleted like for user {} on post {}", userId, postId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

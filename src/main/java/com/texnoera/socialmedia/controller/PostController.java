@@ -27,7 +27,7 @@ public class PostController {
 
     private final PostService postService;
 
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<PageResponse<PostGetResponse>> getPosts(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -58,7 +58,7 @@ public class PostController {
         return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
-    @GetMapping("/get-all-by-user/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<PageResponse<PostGetResponse>> getAllPostsByUserId(
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") int page,
@@ -83,7 +83,7 @@ public class PostController {
     }
 
 
-    @GetMapping("/get-by-user-following/{userId}")
+    @GetMapping("/following/{userId}")
     public ResponseEntity<PageResponse<PostGetResponse>> getPostsByUserFollowing(
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") int page,
@@ -108,7 +108,7 @@ public class PostController {
     }
 
 
-    @PostMapping("/create")
+    @PostMapping
     public ResponseEntity<IamResponse<PostGetResponse>> createPost(@RequestBody @Valid PostAddRequest postAddRequest, Principal principal) {
         log.info("Received request to create post with data: {}", postAddRequest);
         IamResponse<PostGetResponse> response = postService.add(postAddRequest, principal.getName());
