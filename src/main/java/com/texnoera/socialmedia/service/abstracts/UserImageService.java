@@ -9,4 +9,6 @@ public interface UserImageService {
 
     UserImageResponse upload(MultipartFile file, Integer userId) throws IOException;
     byte[] download(Integer id);
+    byte[] downloadUserImage(Integer id);
+    String getContentTypeById(Integer id);
 }

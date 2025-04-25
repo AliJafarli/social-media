@@ -1,5 +1,7 @@
 package com.texnoera.socialmedia.service.concretes;
 
+import com.texnoera.socialmedia.exception.NotFoundException;
+import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.mapper.UserImageMapper;
 import com.texnoera.socialmedia.model.entity.UserImage;
 import com.texnoera.socialmedia.model.response.userImage.UserImageResponse;
@@ -43,5 +45,23 @@ public class UserImageServiceImpl implements UserImageService {
             throw new ImageNotFoundException("No image found for user with id " + id);
         }
 
+    }
+
+    @Override
+    public byte[] downloadUserImage(Integer id) {
+        Optional<UserImage> userImage = userImageRepository.findById(id);
+        if (userImage.isPresent()) {
+            return ImageUtil.decompressImage(userImage.get().getData());
+        } else {
+            throw new ImageNotFoundException("No image found with id " + id);
+        }
+
+    }
+
+    @Override
+    public String getContentTypeById(Integer id) {
+        UserImage userImage = userImageRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ExceptionConstants.USER_IMAGE_NOT_FOUND.getMessage()));
+        return userImage.getType();
     }
 }
