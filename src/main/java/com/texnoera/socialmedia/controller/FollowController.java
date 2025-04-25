@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.*;
 public class FollowController {
     private final FollowService followService;
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<FollowResponse> addFollow(@Valid @RequestBody FollowRequest followRequest) {
         log.info("Received request to add follow: userId={} followingId={}",
                 followRequest.getUserId(), followRequest.getFollowingId());
@@ -30,13 +30,12 @@ public class FollowController {
         return new ResponseEntity<>(followResponse, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Void> deleteFollow(@Valid @RequestBody FollowRequest followRequest) {
-        log.info("Received request to delete follow: userId={} followingId={}",
-                followRequest.getUserId(), followRequest.getFollowingId());
-        followService.delete(followRequest);
-        log.info("Successfully deleted follow: userId={} followingId={}",
-                followRequest.getUserId(), followRequest.getFollowingId());
+    @DeleteMapping("/user/{userId}/following/{followingId}")
+    public ResponseEntity<Void> deleteFollow(@PathVariable Integer userId,
+                                             @PathVariable Integer followingId) {
+        log.info("Received request to delete follow: userId={} followingId={}", userId, followingId);
+        followService.delete(new FollowRequest(userId, followingId));
+        log.info("Successfully deleted follow: userId={} followingId={}", userId, followingId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

@@ -26,7 +26,7 @@ public class CommentController {
 
     private final CommentService commentService;
 
-    @GetMapping("/get-all")
+    @GetMapping
     public ResponseEntity<PageResponse<CommentGetResponse>> getAllComments(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -46,7 +46,7 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @GetMapping("/get-all-by-post/{postId}")
+    @GetMapping("/post/{postId}")
     public ResponseEntity<PageResponse<CommentGetResponse>> getAllCommentsByPostId(
             @PathVariable Integer postId,
             @RequestParam(defaultValue = "0") int page,
@@ -67,7 +67,7 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @GetMapping("/get-all-by-user/{userId}")
+    @GetMapping("/user/{userId}")
     public ResponseEntity<PageResponse<CommentGetResponse>> getAllCommentsByUserId(
             @PathVariable Integer userId,
             @RequestParam(defaultValue = "0") int page,
@@ -88,7 +88,7 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @PostMapping("/add")
+    @PostMapping
     public ResponseEntity<CommentGetResponse> addComment(@RequestBody @Valid CommentAddRequest commentAddRequest) {
         log.info("Received request to add comment: {}", commentAddRequest);
         CommentGetResponse commentGetResponse = commentService.add(commentAddRequest);
@@ -100,6 +100,12 @@ public class CommentController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComment(@PathVariable Integer id) {
         log.info("Received request to delete comment with ID: {}", id);
+        boolean isCommentExists = commentService.existsById(id);
+        if (!isCommentExists) {
+            log.warn("Comment with ID: {} not found", id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
+
         commentService.delete(id);
         log.info("Successfully deleted comment with ID: {}", id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

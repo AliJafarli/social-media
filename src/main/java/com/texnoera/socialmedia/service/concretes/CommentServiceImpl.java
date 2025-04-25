@@ -100,4 +100,8 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Integer id) {
         commentRepository.deleteById(id);
     }
+    @Override
+    public boolean existsById(Integer id) {
+        return commentRepository.existsById(id);
+    }
 }

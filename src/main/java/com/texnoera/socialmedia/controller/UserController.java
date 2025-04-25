@@ -26,7 +26,7 @@ public class UserController {
 
     private final UserService userService;
 
-    @GetMapping("/users-all")
+    @GetMapping
     public ResponseEntity<PageResponse<UserResponse>> getAllUsers(
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size,
@@ -56,15 +56,15 @@ public class UserController {
         return new ResponseEntity<>(userResponse, HttpStatus.OK);
     }
 
-    @GetMapping("/is-following")
-    public ResponseEntity<Boolean> isFollowing(@RequestParam Integer userId, @RequestParam Integer followingId) {
+    @GetMapping("/{userId}/following/{followingId}")
+    public ResponseEntity<Boolean> isFollowing(@PathVariable Integer userId, @PathVariable Integer followingId) {
         log.info("Received request to check if user with ID: {} is following user with ID: {}", userId, followingId);
         Boolean isFollowing = userService.isFollowing(userId, followingId);
         log.info("User with ID: {} is following user with ID: {}: {}", userId, followingId, isFollowing);
         return new ResponseEntity<>(isFollowing, HttpStatus.OK);
     }
 
-    @PostMapping("/create-user")
+    @PostMapping
     public ResponseEntity<UserResponse> create(@Valid @RequestBody UserAddRequest userAddRequest) {
         log.info("Received request to add user: {}", userAddRequest.getEmail());
         UserResponse userResponse = userService.add(userAddRequest);
