@@ -12,7 +12,7 @@ public class UserImageResponse {
     private Integer id;
     private String name;
     private String type;
-    private byte[] data;
+    private String imageUrl;
     private Integer userId;
 
 }

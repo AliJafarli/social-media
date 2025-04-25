@@ -42,6 +42,7 @@ public class SecurityConfig {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         // Public endpoints (per method)
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/auth-login", POST)).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/api/v1/auth-register", POST)).permitAll()

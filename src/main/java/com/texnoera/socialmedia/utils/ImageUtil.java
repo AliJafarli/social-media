@@ -1,7 +1,6 @@
 package com.texnoera.socialmedia.utils;
 
 import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.zip.Deflater;
 import java.util.zip.Inflater;
 
@@ -9,6 +8,9 @@ public class ImageUtil {
 
     public static String buildImageUrl(Integer id) {
         return "http://localhost:8080/api/v1/post-images/view/" + id;
+    }
+    public static String buildUserImageUrl(Integer id) {
+        return "http://localhost:8080/api/v1/user-images/view/" + id;
     }
 
     public static byte[] compressImage(byte[] data) {

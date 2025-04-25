@@ -9,5 +9,6 @@ import org.mapstruct.Mapping;
 public interface UserImageMapper {
 
     @Mapping(source = "user.id", target = "userId")
+    @Mapping(target = "imageUrl", expression = "java(com.texnoera.socialmedia.utils.ImageUtil.buildUserImageUrl(userImage.getId()))")
     UserImageResponse userImageToResponse(UserImage userImage);
 }
