@@ -36,25 +36,24 @@ public class SecurityConfig {
     private static final String GET = "GET";
     private static final String POST = "POST";
 
-    private static final AntPathRequestMatcher[] NOT_SECURED_URLS = new AntPathRequestMatcher[]{
-            new AntPathRequestMatcher("/api/v1/auth-login", POST),
-            new AntPathRequestMatcher("/api/v1/auth-register", POST),
-            new AntPathRequestMatcher("/api/v1/auth-refresh-token", GET),
-
-    };
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers(NOT_SECURED_URLS).permitAll()
+                        // Public endpoints (per method)
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/auth-login", POST)).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/auth-register", POST)).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/auth-refresh-token", GET)).permitAll()
 
-                        .requestMatchers(post("/api/v1/users/users-all")).hasAnyAuthority(adminAccessSecurityRoles())
-                        .requestMatchers(post("/api/v1/users/create-user")).hasAnyAuthority(adminAccessSecurityRoles())
+                        // Admin-only access
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/users", GET)).hasAnyAuthority(adminAccessSecurityRoles())
+                        .requestMatchers(new AntPathRequestMatcher("/api/v1/users", POST)).hasAnyAuthority(adminAccessSecurityRoles())
 
-                        .anyRequest().authenticated())
+                        // All others require authentication
+                        .anyRequest().authenticated()
+                )
                 .exceptionHandling(exceptions ->exceptions
                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                                 .accessDeniedHandler(accessRestrictionHandler)
@@ -90,11 +89,11 @@ public class SecurityConfig {
         };
     }
 
-    private static AntPathRequestMatcher get(String pattern) {
-        return new AntPathRequestMatcher(pattern, GET);
-    }
-
-    private static AntPathRequestMatcher post(String pattern) {
-        return new AntPathRequestMatcher(pattern, POST);
-    }
+//   private static AntPathRequestMatcher get(String pattern) {
+//        return new AntPathRequestMatcher(pattern, GET);
+//    }
+//
+//    private static AntPathRequestMatcher post(String pattern) {
+//        return new AntPathRequestMatcher(pattern, POST);
+//    }
 }
