@@ -89,11 +89,5 @@ public class SecurityConfig {
         };
     }
 
-//   private static AntPathRequestMatcher get(String pattern) {
-//        return new AntPathRequestMatcher(pattern, GET);
-//    }
-//
-//    private static AntPathRequestMatcher post(String pattern) {
-//        return new AntPathRequestMatcher(pattern, POST);
-//    }
+
 }
