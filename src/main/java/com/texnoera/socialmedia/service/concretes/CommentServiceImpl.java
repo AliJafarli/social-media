@@ -1,5 +1,7 @@
 package com.texnoera.socialmedia.service.concretes;
 
+import com.texnoera.socialmedia.exception.NotFoundException;
+import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.mapper.CommentMapper;
 import com.texnoera.socialmedia.model.entity.Comment;
 import com.texnoera.socialmedia.model.entity.Post;
@@ -32,11 +34,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public CommentGetResponse add(CommentAddRequest commentAddRequest) {
         User user = userRepository.findById(commentAddRequest.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_ID.getUserMessage()));
 
 
         Post post = postRepository.findById(commentAddRequest.getPostId())
-                .orElseThrow(() -> new RuntimeException("Post not found"));
+                .orElseThrow(() -> new NotFoundException(ExceptionConstants.POST_NOT_FOUND_BY_ID.getUserMessage()));
         Comment comment = new Comment();
         comment.setCommentText(commentAddRequest.getCommentText());
         comment.setUser(user);
@@ -45,7 +47,7 @@ public class CommentServiceImpl implements CommentService {
         commentRepository.save(comment);
 
         Comment saved = commentRepository.findById(comment.getId())
-                .orElseThrow(() -> new RuntimeException("Comment not found after save"));
+                .orElseThrow(() -> new NotFoundException(ExceptionConstants.COMMENT_NOT_FOUND_BY_ID.getUserMessage()));
 
         return commentMapper.commentToResponse(saved);
     }
