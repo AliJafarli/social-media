@@ -7,11 +7,12 @@ import com.texnoera.socialmedia.model.response.like.LikeResponse;
 import com.texnoera.socialmedia.repository.LikeRepository;
 import com.texnoera.socialmedia.service.abstracts.LikeService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class LikeServiceImpl implements LikeService {
@@ -44,7 +45,10 @@ public class LikeServiceImpl implements LikeService {
         }
         Like like = likeMapper.requestToLike(likeRequest);
         likeRepository.save(like);
-        return likeMapper.likeToPostLikeResponse(like);
+        LikeResponse response = likeMapper.likeToPostLikeResponse(like);
+        log.info("Returning LikeResponse: {}", response);
+
+        return response;
 
     }
 
