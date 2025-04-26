@@ -1,8 +1,9 @@
 package com.texnoera.socialmedia.controller;
 
-import com.texnoera.socialmedia.model.request.UserAddRequest;
+import com.texnoera.socialmedia.model.request.RegistrationUserRequest;
 import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.page.PageResponse;
+import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.service.abstracts.UserService;
 import jakarta.validation.Valid;
@@ -64,13 +65,7 @@ public class UserController {
         return new ResponseEntity<>(isFollowing, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponse> create(@Valid @RequestBody UserAddRequest userAddRequest) {
-        log.info("Received request to add user: {}", userAddRequest.getEmail());
-        UserResponse userResponse = userService.add(userAddRequest);
-        log.info("Successfully created user with ID: {}", userResponse.getId());
-        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
-    }
+
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Integer id, @Valid @RequestBody UserUpdateRequest userUpdateRequest) {

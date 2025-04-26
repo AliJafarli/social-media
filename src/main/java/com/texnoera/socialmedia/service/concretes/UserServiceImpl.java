@@ -4,18 +4,23 @@ import com.texnoera.socialmedia.exception.DataExistException;
 import com.texnoera.socialmedia.exception.NotFoundException;
 import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.mapper.UserMapper;
+import com.texnoera.socialmedia.model.entity.RefreshToken;
 import com.texnoera.socialmedia.model.entity.Role;
 import com.texnoera.socialmedia.model.entity.User;
-import com.texnoera.socialmedia.model.request.UserAddRequest;
+import com.texnoera.socialmedia.model.request.RegistrationUserRequest;
 import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.page.PageResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
+import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.repository.FollowRepository;
+import com.texnoera.socialmedia.repository.RefreshTokenRepository;
 import com.texnoera.socialmedia.repository.RoleRepository;
 import com.texnoera.socialmedia.repository.UserRepository;
+import com.texnoera.socialmedia.security.JwtTokenProvider;
 import com.texnoera.socialmedia.security.enums.SocialMediaUserRole;
 import com.texnoera.socialmedia.security.validation.AccessValidator;
+import com.texnoera.socialmedia.service.abstracts.RefreshTokenService;
 import com.texnoera.socialmedia.service.abstracts.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -26,6 +31,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -44,6 +50,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final AccessValidator accessValidator;
+    private final RefreshTokenService refreshTokenService;
+    private final JwtTokenProvider jwtTokenProvider;
+    private final RefreshTokenRepository refreshTokenRepository;
 
     public PageResponse<UserResponse> getAll(Pageable pageable) {
         log.debug("Fetching all users with pageable: {}", pageable);
@@ -105,20 +114,30 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse add(UserAddRequest userAddRequest) {
+    public UserProfileResponse add(RegistrationUserRequest request) {
+        accessValidator.validateNewUser(
+                request.getUsername(),
+                request.getEmail(),
+                request.getPassword(),
+                request.getConfirmPassword()
+        );
 
-        log.info("Adding user: username={}, email={}", userAddRequest.getUsername(), userAddRequest.getEmail());
+        log.info("Adding user: username={}, email={}", request.getUsername(), request.getEmail());
         Role userRole = roleRepository.findByName(SocialMediaUserRole.USER.getRole())
                 .orElseThrow(() -> new NotFoundException(ExceptionConstants.USER_ROLE_NOT_FOUND.getUserMessage()));
 
-        User user = userMapper.requestToUser(userAddRequest);
-        user.setPassword(passwordEncoder.encode(userAddRequest.getPassword()));
+        User user = userMapper.requestToUser(request);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         user.setRoles(roles);
         userRepository.save(user);
-        log.info("User created successfully: id={}", user.getId());
-        return userMapper.userToResponse(user);
+        RefreshToken refreshToken  = refreshTokenService.generateOrUpdateRefreshToken(user);
+        String token = jwtTokenProvider.generateToken(user);
+        UserProfileResponse userProfileResponse = userMapper.toUserProfileResponse(user, token, refreshToken.getToken());
+        userProfileResponse.setToken(token);
+
+        return userProfileResponse;
     }
 
 
@@ -144,13 +163,14 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToResponse(updatedUser);
 
     }
-
+    @Transactional
     @Override
-    public void delete(Integer id) {
-        log.info("Deleting user ID: {}", id);
-        accessValidator.validateAdminOrOwnerAccess(id);
-        userRepository.deleteById(id);
-        log.info("User deleted successfully: ID={}", id);
+    public void delete(Integer userId) {
+        log.info("Deleting user ID: {}", userId);
+        accessValidator.validateAdminOrOwnerAccess(userId);
+        refreshTokenRepository.deleteByUserId(userId);
+        userRepository.deleteById(userId);
+        log.info("User deleted successfully: ID={}", userId);
     }
 
     @Override

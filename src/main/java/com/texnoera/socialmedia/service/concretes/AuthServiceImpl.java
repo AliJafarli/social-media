@@ -1,6 +1,5 @@
 package com.texnoera.socialmedia.service.concretes;
 
-import com.texnoera.socialmedia.exception.DataExistException;
 import com.texnoera.socialmedia.exception.InvalidDataException;
 import com.texnoera.socialmedia.exception.NotFoundException;
 import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
@@ -19,7 +18,6 @@ import com.texnoera.socialmedia.security.validation.AccessValidator;
 import com.texnoera.socialmedia.service.abstracts.AuthService;
 import com.texnoera.socialmedia.service.abstracts.RefreshTokenService;
 import com.texnoera.socialmedia.service.model.IamServiceUserRole;
-import com.texnoera.socialmedia.utils.PasswordUtils;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
