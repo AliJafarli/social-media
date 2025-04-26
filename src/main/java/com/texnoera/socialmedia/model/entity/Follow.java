@@ -1,17 +1,16 @@
 package com.texnoera.socialmedia.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
 import java.time.LocalDateTime;
 
-@Data
+
+@Getter
+@Setter
+@RequiredArgsConstructor
 @Entity
-@NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "follows")
 public class Follow {
@@ -34,4 +33,6 @@ public class Follow {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+
 }
