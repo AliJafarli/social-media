@@ -12,7 +12,7 @@ import java.util.List;
 public interface LikeMapper {
 
     @Mapping(source = "user.id", target = "userId")
-    @Mapping(source = "user.username", target = "username")
+//    @Mapping(source = "user.username", target = "username")
     LikeResponse likeToPostLikeResponse(Like like);
 
     @Mapping(source = "userId", target = "user.id")

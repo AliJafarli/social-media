@@ -11,5 +11,5 @@ public class LikeResponse {
 
     private Integer id;
     private Integer userId;
-    private String username;
+//    private String username;
 }
