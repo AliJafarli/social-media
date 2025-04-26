@@ -2,11 +2,15 @@ package com.texnoera.socialmedia.service.concretes;
 
 import com.texnoera.socialmedia.mapper.CommentMapper;
 import com.texnoera.socialmedia.model.entity.Comment;
+import com.texnoera.socialmedia.model.entity.Post;
+import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.CommentAddRequest;
 import com.texnoera.socialmedia.model.request.CommentUpdateRequest;
 import com.texnoera.socialmedia.model.response.comment.CommentGetResponse;
 import com.texnoera.socialmedia.model.response.page.PageResponse;
 import com.texnoera.socialmedia.repository.CommentRepository;
+import com.texnoera.socialmedia.repository.PostRepository;
+import com.texnoera.socialmedia.repository.UserRepository;
 import com.texnoera.socialmedia.service.abstracts.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,12 +26,28 @@ public class CommentServiceImpl implements CommentService {
 
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
+    private final UserRepository userRepository;
+    private final PostRepository postRepository;
 
     @Override
     public CommentGetResponse add(CommentAddRequest commentAddRequest) {
-        Comment comment = commentMapper.addRequestToComment(commentAddRequest);
+        User user = userRepository.findById(commentAddRequest.getUserId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+
+        Post post = postRepository.findById(commentAddRequest.getPostId())
+                .orElseThrow(() -> new RuntimeException("Post not found"));
+        Comment comment = new Comment();
+        comment.setCommentText(commentAddRequest.getCommentText());
+        comment.setUser(user);
+        comment.setPost(post);
+
         commentRepository.save(comment);
-        return commentMapper.commentToResponse(comment);
+
+        Comment saved = commentRepository.findById(comment.getId())
+                .orElseThrow(() -> new RuntimeException("Comment not found after save"));
+
+        return commentMapper.commentToResponse(saved);
     }
 
     @Override
@@ -100,6 +120,7 @@ public class CommentServiceImpl implements CommentService {
     public void delete(Integer id) {
         commentRepository.deleteById(id);
     }
+
     @Override
     public boolean existsById(Integer id) {
         return commentRepository.existsById(id);
