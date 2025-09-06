@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getResponseById(Integer id) {
         log.debug("Getting user response by ID: {}", id);
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findByIdAndDeletedFalse(id).orElse(null);
         if (user == null) {
             log.warn("User not found with ID: {}", id);
         }
@@ -83,10 +83,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getByEmail(String email) {
         log.debug("Getting user by email: {}", email);
-        User user = userRepository.findByEmail(email);
-        if (user == null) {
-            log.warn("User not found with email: {}", email);
-        }
+        User user = userRepository.findUserByEmailAndDeletedFalse(email)
+                .orElseThrow(() -> {
+                    log.warn("User not found with email: {}", email);
+                    return new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_EMAIL.getMessage(email));
+                });
+
         return userMapper.userToResponse(user);
     }
 
@@ -107,11 +109,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(Integer id) {
         log.debug("Fetching user entity by ID: {}", id);
-        return userRepository.findById(id).orElseThrow(() -> {
-            log.warn("User not found by ID: {}", id);
-            return new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_ID.getMessage(id));
-        });
+        User user = userRepository.findByIdAndDeletedFalse(id)
+                .orElseThrow(() -> {
+                    log.warn("User not found by ID: {}", id);
+                    return new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_ID.getMessage(id));
+                });
+
+        return user;
     }
+
 
     @Override
     public UserProfileResponse add(RegistrationUserRequest request) {
@@ -132,7 +138,7 @@ public class UserServiceImpl implements UserService {
         roles.add(userRole);
         user.setRoles(roles);
         userRepository.save(user);
-        RefreshToken refreshToken  = refreshTokenService.generateOrUpdateRefreshToken(user);
+        RefreshToken refreshToken = refreshTokenService.generateOrUpdateRefreshToken(user);
         String token = jwtTokenProvider.generateToken(user);
         UserProfileResponse userProfileResponse = userMapper.toUserProfileResponse(user, token, refreshToken.getToken());
         userProfileResponse.setToken(token);
@@ -163,6 +169,7 @@ public class UserServiceImpl implements UserService {
         return userMapper.userToResponse(updatedUser);
 
     }
+
     @Transactional
     @Override
     public void delete(Integer userId) {

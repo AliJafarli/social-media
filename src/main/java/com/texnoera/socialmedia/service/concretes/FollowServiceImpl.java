@@ -43,12 +43,7 @@ public class FollowServiceImpl implements FollowService {
         followRepository.save(follow);
 
         return followMapper.followToResponse(follow);
-//        if (userService.isFollowing(followAddRequest.getUserId(), followAddRequest.getFollowingId())) {
-//            throw new AlreadyFollowingException(ExceptionConstants.ALREADY_FOLLOWING_EXCEPTION.getUserMessage());
-//        }
-//        Follow follow = followMapper.addRequestToFollow(followAddRequest);
-//        followRepository.save(follow);
-//        return followMapper.followToResponse(follow);
+
     }
 
     @Override
