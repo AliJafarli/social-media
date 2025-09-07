@@ -1,5 +1,6 @@
 package com.texnoera.socialmedia;
 
+import com.texnoera.socialmedia.exception.NotFoundException;
 import com.texnoera.socialmedia.mapper.UserMapper;
 import com.texnoera.socialmedia.model.entity.Role;
 import com.texnoera.socialmedia.model.entity.User;
@@ -20,7 +21,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.util.Optional;
 import java.util.Set;
 
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -66,6 +70,25 @@ public class UserServiceTest {
 
         UserResponse result = userService.getResponseById(1);
 
+        assertNotNull(result);
+        assertEquals(testUserResponse.getId(), result.getId());
+        assertEquals(testUserResponse.getUsername(), result.getUsername());
+
+        verify(userRepository, times(1)).findByIdAndDeletedFalse(1);
+        verify(userMapper, times(1)).userToResponse(testUser);
+
+    }
+
+    @Test
+    void getById_UserNotFound_ThrowsException() {
+        when(userRepository.findByIdAndDeletedFalse(999)).thenReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userService.getResponseById(999))
+                .isInstanceOf(NotFoundException.class)
+                .hasMessageContaining("User with ID: 999 was not found"
+                );
+        verify(userRepository, times(1)).findByIdAndDeletedFalse(999);
+        verify(userMapper, times(0)).userToResponse(testUser);
     }
 
 }
