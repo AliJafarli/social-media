@@ -73,10 +73,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserResponse getResponseById(Integer id) {
         log.debug("Getting user response by ID: {}", id);
-        User user = userRepository.findByIdAndDeletedFalse(id).orElse(null);
-        if (user == null) {
-            log.warn("User not found with ID: {}", id);
-        }
+        User user = userRepository.findByIdAndDeletedFalse(id).orElseThrow(() -> {
+            log.warn("User not found by ID: {}", id);
+            return new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_ID.getMessage(id));
+        });
         return userMapper.userToResponse(user);
     }
 
@@ -109,13 +109,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getById(Integer id) {
         log.debug("Fetching user entity by ID: {}", id);
-        User user = userRepository.findByIdAndDeletedFalse(id)
+
+        return userRepository.findByIdAndDeletedFalse(id)
                 .orElseThrow(() -> {
                     log.warn("User not found by ID: {}", id);
                     return new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_ID.getMessage(id));
                 });
-
-        return user;
     }
 
 
