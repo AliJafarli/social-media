@@ -1,10 +1,10 @@
 package com.texnoera.socialmedia.config;
 
 
+import com.texnoera.socialmedia.security.enums.SocialMediaUserRole;
 import com.texnoera.socialmedia.security.filter.JwtRequestFilter;
 import com.texnoera.socialmedia.security.handler.AccessRestrictionHandler;
 import com.texnoera.socialmedia.service.abstracts.UserService;
-import com.texnoera.socialmedia.service.model.IamServiceUserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -85,8 +85,8 @@ public class SecurityConfig {
 
     private String[] adminAccessSecurityRoles() {
         return new String[]{
-                IamServiceUserRole.SUPER_ADMIN.name(),
-                IamServiceUserRole.ADMIN.name()
+                SocialMediaUserRole.SUPER_ADMIN.name(),
+                SocialMediaUserRole.ADMIN.name()
         };
     }
 

@@ -7,7 +7,7 @@ import com.texnoera.socialmedia.exception.NotFoundException;
 import com.texnoera.socialmedia.exception.constants.ExceptionConstants;
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.repository.UserRepository;
-import com.texnoera.socialmedia.service.model.IamServiceUserRole;
+import com.texnoera.socialmedia.security.enums.SocialMediaUserRole;
 import com.texnoera.socialmedia.utils.ApiUtils;
 import com.texnoera.socialmedia.utils.PasswordUtils;
 import lombok.RequiredArgsConstructor;
@@ -46,8 +46,8 @@ public class AccessValidator {
                 .orElseThrow(() -> new NotFoundException(ExceptionConstants.USER_NOT_FOUND_BY_ID.getMessage(userId)));
 
         return user.getRoles().stream()
-                .map(role -> IamServiceUserRole.fromName(role.getName()))
-                .anyMatch(role -> role == IamServiceUserRole.ADMIN || role == IamServiceUserRole.SUPER_ADMIN);
+                .map(role -> SocialMediaUserRole.fromName(role.getName()))
+                .anyMatch(role -> role == SocialMediaUserRole.ADMIN || role == SocialMediaUserRole.SUPER_ADMIN);
     }
 
     @SneakyThrows
