@@ -8,8 +8,10 @@ import com.texnoera.socialmedia.model.entity.RefreshToken;
 import com.texnoera.socialmedia.model.entity.Role;
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.RegistrationUserRequest;
+import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.page.PageResponse;
+import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
 import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
@@ -50,8 +52,6 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final AccessValidator accessValidator;
-    private final RefreshTokenService refreshTokenService;
-    private final JwtTokenProvider jwtTokenProvider;
     private final RefreshTokenRepository refreshTokenRepository;
 
     public PageResponse<UserResponse> getAll(Pageable pageable) {
@@ -119,15 +119,17 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public UserProfileResponse add(RegistrationUserRequest request) {
-        accessValidator.validateNewUser(
-                request.getUsername(),
-                request.getEmail(),
-                request.getPassword(),
-                request.getConfirmPassword()
-        );
+    @Transactional
+    public IamResponse<UserResponse> add(UserAddRequest request) {
 
-        log.info("Adding user: username={}, email={}", request.getUsername(), request.getEmail());
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new DataExistException(ExceptionConstants.EMAIL_ALREADY_EXISTS.getMessage(request.getEmail()));
+        }
+
+        if (userRepository.existsByUsername(request.getUsername())) {
+            throw new DataExistException(ExceptionConstants.USERNAME_ALREADY_EXISTS.getMessage(request.getUsername()));
+        }
+
         Role userRole = roleRepository.findByName(SocialMediaUserRole.USER.getRole())
                 .orElseThrow(() -> new NotFoundException(ExceptionConstants.USER_ROLE_NOT_FOUND.getUserMessage()));
 
@@ -136,13 +138,10 @@ public class UserServiceImpl implements UserService {
         Set<Role> roles = new HashSet<>();
         roles.add(userRole);
         user.setRoles(roles);
-        userRepository.save(user);
-        RefreshToken refreshToken = refreshTokenService.generateOrUpdateRefreshToken(user);
-        String token = jwtTokenProvider.generateToken(user);
-        UserProfileResponse userProfileResponse = userMapper.toUserProfileResponse(user, token, refreshToken.getToken());
-        userProfileResponse.setToken(token);
+        User savedUser = userRepository.save(user);
 
-        return userProfileResponse;
+        return IamResponse.createSuccessful(userMapper.userToResponse(savedUser));
+
     }
 
 
