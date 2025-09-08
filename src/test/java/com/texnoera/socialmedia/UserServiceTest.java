@@ -4,6 +4,7 @@ import com.texnoera.socialmedia.exception.NotFoundException;
 import com.texnoera.socialmedia.mapper.UserMapper;
 import com.texnoera.socialmedia.model.entity.Role;
 import com.texnoera.socialmedia.model.entity.User;
+import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.repository.RoleRepository;
 import com.texnoera.socialmedia.repository.UserRepository;
@@ -91,4 +92,15 @@ public class UserServiceTest {
         verify(userMapper, times(0)).userToResponse(testUser);
     }
 
+    @Test
+    void createUser_AsSuperAdmin_CreatesUserSuccessfully() {
+        UserAddRequest request = new UserAddRequest("NewUser","newuser@gmail.com","password123!");
+
+        when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
+        when(userRepository.existsByUsername(request.getUsername())).thenReturn(false);
+        when(roleRepository.findByName(IamServiceUserRole.USER.getRole())).thenReturn(Optional.of(superAdminRole));
+
+
+
+    }
 }
