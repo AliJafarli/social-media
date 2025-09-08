@@ -1,5 +1,6 @@
 package com.texnoera.socialmedia;
 
+import com.texnoera.socialmedia.exception.DataExistException;
 import com.texnoera.socialmedia.exception.NotFoundException;
 import com.texnoera.socialmedia.mapper.UserMapper;
 import com.texnoera.socialmedia.model.entity.Role;
@@ -27,6 +28,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
+
 
 @ExtendWith(MockitoExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_METHOD)
@@ -125,5 +127,20 @@ public class UserServiceTest {
         verify(userMapper, times(1)).userToResponse(newUser);
 
 
+    }
+
+    @Test
+    void createUser_EmailAlreadyExists_ThrowsException() {
+
+        UserAddRequest request = new UserAddRequest("NewUser", "newuser@gmail.com", "password123!");
+
+        when(userRepository.existsByEmail(request.getEmail())).thenReturn(true);
+        assertThatThrownBy(() -> userService.add(request))
+                .isInstanceOf(DataExistException.class)
+                .hasMessageContaining("already exists");
+
+        verify(userRepository, times(1)).existsByEmail(request.getEmail());
+        verify(userRepository, never()).existsByUsername(anyString());
+        verify(userRepository, never()).save(any(User.class));
     }
 }
