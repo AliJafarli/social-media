@@ -5,7 +5,6 @@ import com.texnoera.socialmedia.mapper.UserMapper;
 import com.texnoera.socialmedia.model.entity.Role;
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.UserAddRequest;
-import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.repository.RoleRepository;
 import com.texnoera.socialmedia.repository.UserRepository;
@@ -116,7 +115,14 @@ public class UserServiceTest {
 
         UserResponse result = userService.add(request).getPayload();
 
+        assertNotNull(result);
+        assertEquals(testUserResponse.getId(), result.getId());
+        assertEquals(testUserResponse.getUsername(), result.getUsername());
 
+        verify(userRepository, times(1)).existsByEmail(request.getEmail());
+        verify(userRepository, times(1)).existsByUsername(request.getUsername());
+        verify(userRepository, times(1)).save(any(User.class));
+        verify(userMapper, times(1)).userToResponse(newUser);
 
 
     }
