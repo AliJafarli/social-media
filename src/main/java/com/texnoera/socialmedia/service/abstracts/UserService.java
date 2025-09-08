@@ -2,8 +2,10 @@ package com.texnoera.socialmedia.service.abstracts;
 
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.RegistrationUserRequest;
+import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.page.PageResponse;
+import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 import com.texnoera.socialmedia.model.response.user.UserFollowingResponse;
 import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
@@ -20,7 +22,7 @@ public interface UserService extends UserDetailsService {
     List<UserFollowingResponse> getUserFollowing(Integer userId);
     boolean isFollowing(Integer userId, Integer followingId);
     User getById(Integer id);
-    UserProfileResponse add(RegistrationUserRequest registrationUserRequest);
+    IamResponse<UserResponse> add(UserAddRequest userAddRequest);
     void delete(Integer id);
     UserResponse update(Integer id, UserUpdateRequest userUpdateRequest);
 }

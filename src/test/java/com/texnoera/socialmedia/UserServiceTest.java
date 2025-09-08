@@ -5,6 +5,7 @@ import com.texnoera.socialmedia.mapper.UserMapper;
 import com.texnoera.socialmedia.model.entity.Role;
 import com.texnoera.socialmedia.model.entity.User;
 import com.texnoera.socialmedia.model.request.UserAddRequest;
+import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.repository.RoleRepository;
 import com.texnoera.socialmedia.repository.UserRepository;
@@ -19,6 +20,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Collections;
 import java.util.Optional;
 import java.util.Set;
 
@@ -94,11 +96,26 @@ public class UserServiceTest {
 
     @Test
     void createUser_AsSuperAdmin_CreatesUserSuccessfully() {
-        UserAddRequest request = new UserAddRequest("NewUser","newuser@gmail.com","password123!");
+        UserAddRequest request = new UserAddRequest("NewUser", "newuser@gmail.com", "password123!");
 
         when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
         when(userRepository.existsByUsername(request.getUsername())).thenReturn(false);
         when(roleRepository.findByName(IamServiceUserRole.USER.getRole())).thenReturn(Optional.of(superAdminRole));
+
+        User newUser = new User();
+        newUser.setEmail(request.getEmail());
+        newUser.setUsername(request.getUsername());
+        newUser.setPassword("encodedPassword");
+        newUser.setRoles(Collections.singleton(superAdminRole));
+
+        when(userMapper.requestToUser(request)).thenReturn(newUser);
+
+        when(passwordEncoder.encode(request.getPassword())).thenReturn("encodedPassword");
+        when(userRepository.save(any(User.class))).thenReturn(newUser);
+        when(userMapper.userToResponse(newUser)).thenReturn(testUserResponse);
+
+        UserResponse result = userService.add(request).getPayload();
+
 
 
 

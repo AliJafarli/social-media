@@ -40,7 +40,7 @@ public interface UserMapper {
     @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
     UserResponse userToResponse(User user);
 
-    User requestToUser(RegistrationUserRequest registrationUserRequest);
+    User requestToUser(UserAddRequest request);
 
     List<UserResponse> usersToResponses(List<User> users);
 
