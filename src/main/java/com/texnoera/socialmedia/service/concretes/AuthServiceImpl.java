@@ -14,10 +14,10 @@ import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
 import com.texnoera.socialmedia.repository.RoleRepository;
 import com.texnoera.socialmedia.repository.UserRepository;
 import com.texnoera.socialmedia.security.JwtTokenProvider;
+import com.texnoera.socialmedia.security.enums.SocialMediaUserRole;
 import com.texnoera.socialmedia.security.validation.AccessValidator;
 import com.texnoera.socialmedia.service.abstracts.AuthService;
 import com.texnoera.socialmedia.service.abstracts.RefreshTokenService;
-import com.texnoera.socialmedia.service.model.IamServiceUserRole;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -84,7 +84,7 @@ public class AuthServiceImpl implements AuthService {
                 request.getConfirmPassword()
         );
 
-        Role userRole = roleRepository.findByName(IamServiceUserRole.USER.getRole())
+        Role userRole = roleRepository.findByName(SocialMediaUserRole.USER.getRole())
                 .orElseThrow(()->new NotFoundException(ExceptionConstants.USER_ROLE_NOT_FOUND.getMessage()));
 
         User newUser = userMapper.fromDto(request);

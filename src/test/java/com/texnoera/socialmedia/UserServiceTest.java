@@ -9,8 +9,8 @@ import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.repository.RoleRepository;
 import com.texnoera.socialmedia.repository.UserRepository;
+import com.texnoera.socialmedia.security.enums.SocialMediaUserRole;
 import com.texnoera.socialmedia.service.concretes.UserServiceImpl;
-import com.texnoera.socialmedia.service.model.IamServiceUserRole;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -52,7 +52,7 @@ public class UserServiceTest {
     void setUp() {
 
         superAdminRole = new Role();
-        superAdminRole.setName(IamServiceUserRole.SUPER_ADMIN.getRole());
+        superAdminRole.setName(SocialMediaUserRole.SUPER_ADMIN.getRole());
 
         testUser = new User();
         testUser.setId(1);
@@ -101,7 +101,7 @@ public class UserServiceTest {
 
         when(userRepository.existsByEmail(request.getEmail())).thenReturn(false);
         when(userRepository.existsByUsername(request.getUsername())).thenReturn(false);
-        when(roleRepository.findByName(IamServiceUserRole.USER.getRole())).thenReturn(Optional.of(superAdminRole));
+        when(roleRepository.findByName(SocialMediaUserRole.USER.getRole())).thenReturn(Optional.of(superAdminRole));
 
         User newUser = new User();
         newUser.setEmail(request.getEmail());
