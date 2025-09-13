@@ -72,7 +72,8 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public CommentGetResponse getById(Integer id) {
-        Comment comment = commentRepository.findById(id).orElse(null);
+        Comment comment = commentRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException(ExceptionConstants.COMMENT_NOT_FOUND_BY_ID.getUserMessage()));
         return commentMapper.commentToResponse(comment);
     }
 
