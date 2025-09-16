@@ -108,7 +108,7 @@ public class PostController {
     }
 
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<IamResponse<PostGetResponse>> createPost(@RequestBody @Valid PostAddRequest postAddRequest, Principal principal) {
         log.info("Received request to create post with data: {}", postAddRequest);
         IamResponse<PostGetResponse> response = postService.add(postAddRequest, principal.getName());
