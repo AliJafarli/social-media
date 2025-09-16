@@ -1,11 +1,13 @@
 package com.texnoera.socialmedia.controller;
 
-import com.texnoera.socialmedia.model.request.RegistrationUserRequest;
+import com.texnoera.socialmedia.exception.constants.ApiLogMessage;
+import com.texnoera.socialmedia.model.request.UserAddRequest;
 import com.texnoera.socialmedia.model.request.UserUpdateRequest;
 import com.texnoera.socialmedia.model.response.page.PageResponse;
-import com.texnoera.socialmedia.model.response.user.UserProfileResponse;
+import com.texnoera.socialmedia.model.response.someResponses.IamResponse;
 import com.texnoera.socialmedia.model.response.user.UserResponse;
 import com.texnoera.socialmedia.service.abstracts.UserService;
+import com.texnoera.socialmedia.utils.ApiUtils;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -65,7 +67,14 @@ public class UserController {
         return new ResponseEntity<>(isFollowing, HttpStatus.OK);
     }
 
+    @PostMapping("/create")
+    public ResponseEntity<IamResponse<UserResponse>> createUser(
+            @RequestBody @Valid UserAddRequest request) {
+        log.trace(ApiLogMessage.NAME_OF_CURRENT_METHOD.getValue(), ApiUtils.getMethodName());
 
+        IamResponse<UserResponse> createdUser = userService.add(request);
+        return ResponseEntity.ok(createdUser);
+    }
 
     @PutMapping("/{id}")
     public ResponseEntity<UserResponse> updateUser(@PathVariable Integer id, @Valid @RequestBody UserUpdateRequest userUpdateRequest) {
