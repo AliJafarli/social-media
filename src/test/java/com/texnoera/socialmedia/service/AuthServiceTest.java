@@ -1,4 +1,4 @@
-package com.texnoera.socialmedia;
+package com.texnoera.socialmedia.service;
 
 import com.texnoera.socialmedia.exception.InvalidDataException;
 import com.texnoera.socialmedia.mapper.UserMapper;

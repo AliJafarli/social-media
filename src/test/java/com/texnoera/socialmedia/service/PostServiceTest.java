@@ -1,4 +1,4 @@
-package com.texnoera.socialmedia;
+package com.texnoera.socialmedia.service;
 
 import com.texnoera.socialmedia.exception.NotFoundException;
 import com.texnoera.socialmedia.mapper.PostMapper;

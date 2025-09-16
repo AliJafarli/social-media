@@ -1,4 +1,4 @@
-package com.texnoera.socialmedia;
+package com.texnoera.socialmedia.service;
 
 import com.texnoera.socialmedia.exception.DataExistException;
 import com.texnoera.socialmedia.exception.NotFoundException;
