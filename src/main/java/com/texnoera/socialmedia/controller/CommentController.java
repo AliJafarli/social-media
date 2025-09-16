@@ -88,7 +88,7 @@ public class CommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<CommentGetResponse> addComment(@RequestBody @Valid CommentAddRequest commentAddRequest) {
         log.info("Received request to add comment: {}", commentAddRequest);
         CommentGetResponse commentGetResponse = commentService.add(commentAddRequest);
