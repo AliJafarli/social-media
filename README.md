@@ -1,6 +1,6 @@
 SOCIAL MEDIA 
 
-A backend REST API for a basic social media platform, built using Java and Spring Boot. Users can register, log in, create posts, like, comment, and follow other users.
+A backend RESTful API for a basic social media platform, built using Java and Spring Boot. Users can register, log in, create posts, like, comment, and follow other users.
 
 🚀 Features
 
