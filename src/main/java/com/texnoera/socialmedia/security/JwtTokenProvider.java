@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 @Slf4j
 @Component
 public class JwtTokenProvider {
-
     private final SecretKey secretKey;
     private final Long jwtValidityInMilliseconds;
 
