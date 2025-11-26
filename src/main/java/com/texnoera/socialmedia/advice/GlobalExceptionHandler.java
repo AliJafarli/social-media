@@ -7,7 +7,6 @@ import com.texnoera.socialmedia.exception.response.ExceptionResponse;
 import com.texnoera.socialmedia.exception.response.ValidationErrorResponse;
 import com.texnoera.socialmedia.model.constants.ApiConstants;
 import lombok.extern.log4j.Log4j2;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -88,7 +87,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
 
-//-------------------------------------------------------------------------------------------
+//-------------------------------------------------------------------------------------
     @ExceptionHandler(Exception.class)
     @ResponseStatus(INTERNAL_SERVER_ERROR)
     public ExceptionResponse handle(Exception exception, WebRequest request) {
