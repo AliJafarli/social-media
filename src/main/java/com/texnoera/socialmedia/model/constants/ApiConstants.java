@@ -23,4 +23,6 @@ public final class ApiConstants {
     public static final Integer REQUIRED_MIN_DIGITS_NUMBER_IN_PASSWORD = 1;
     public static final Integer REQUIRED_MIN_CHARACTERS_NUMBER_IN_PASSWORD = 1;
 
+
+
 }
